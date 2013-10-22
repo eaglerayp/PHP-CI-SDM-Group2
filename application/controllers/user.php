@@ -86,9 +86,19 @@
                 redirect(site_url("/user/login")); //轉回登入頁  
                 return true;  
             }  //end if
+            $account = $_SESSION["user"]->userid;
+
+            $this->load->model("UserModel");
+            //完成取資料動作
+            $userfile = $this->UserModel->getUserfile($account); 
+            $userwork = $this->UserModel->getUserwork($account); 
+            $userstudentid = $this->UserModel->getUserstudentid($account); 
 
             $this->load->view('useredit',Array(  
-            "pageTitle" => "Edit profile"
+            "pageTitle" => "Edit profile",
+            "userwork" => $userwork,
+            "userstudentid" => $userstudentid,
+            "userfile" => $userfile
             ));  
         }
 
@@ -97,7 +107,11 @@
                 redirect(site_url("/user/login")); //轉回登入頁  
                 return true;  
             }  
-//edit implement
+            //edit implement
+            $this->load->model("ArticleModel");  
+            //完成取資料動作  
+            $article = $this->ArticleModel->get($articleID);  
+
 
             $_SESSION["user"] = $user;
             $this->load->view('userfile',Array(  

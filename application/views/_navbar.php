@@ -1,5 +1,5 @@
     <? /* php parameter $_SESSION["user"]=getuser result (SELECT userid,username) 
-      *$_SESSION["user"]    like php object  , attribute "userid" ,"username"      */ ?>
+      *$_SESSION["user"]  is php object  , attribute "userid" ,"username"      */ ?>
 
     <!-- NAVBAR
     ================================================== -->

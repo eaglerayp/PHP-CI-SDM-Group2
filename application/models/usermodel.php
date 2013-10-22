@@ -29,5 +29,42 @@
             else{  
                 return null;  
             }  
-        }  
+        }
+
+        function getUserfile($account){  
+            $this->db->select("*");  
+            $query = $this->db->get_where("user",Array("userid" => $account));  
+      
+            if ($query->num_rows() > 0){ //如果數量大於0  
+                return $query->row();  //回傳第一筆  
+            }
+            else{  
+                return null;  
+            }  
+        }
+
+        function getUserwork($account){  
+            $this->db->select("*");  
+            $query = $this->db->get_where("userwork",Array("userid" => $account));  
+      
+            if ($query->num_rows() > 0){ //如果數量大於0  
+                return $query->result();  //回傳全部
+            }
+            else{  
+                return null;  
+            }  
+        }
+
+        function getUserstudentid($account){  
+            $this->db->select("*");  
+            $query = $this->db->get_where("userstudentid",Array("userid" => $account));  
+      
+            if ($query->num_rows() > 0){ //如果數量大於0  
+                return $query->result();  //回傳全部
+            }
+            else{  
+                return null;  
+            }  
+        }
+
     }  
