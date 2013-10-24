@@ -67,4 +67,38 @@
             }  
         }
 
+        function updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath){
+            $data = array(
+            'email' => $email,
+            'address' => $address,
+            'addressshow' => $addressshow,
+            'phone'=> $phone,
+            'phoneshow' => $phoneshow,
+            'autobiography' => $autobiography,
+            'usercategory' => $usercategory,
+            'image' => $imgpath
+            );
+
+            $this->db->where('userid', $userid);
+            $this->db->update('user', $data);
+        }
+
+        function insertwork($userid,$position,$employer,$positionshow,$employershow){  
+            $this->db->insert("userwork",   
+            Array(  
+            "userid" =>  $userid,  
+            "position" => $position,
+            "employer" => $employer,
+            "positionshow" => $positionshow,
+            "employershow"=> $employershow  
+        ));  
+        }
+
+        function insertstudentid($userid,$userstudentid){  
+            $this->db->insert("userstudentid",   
+            Array(  
+            "userid" =>  $userid,  
+            "userstudentid" => $userstudentid
+        ));  
+        } 
     }  

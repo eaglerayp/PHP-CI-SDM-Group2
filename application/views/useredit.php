@@ -17,8 +17,10 @@
 
 
 		<?php echo form_open_multipart("user/editing");?>
+
+		<input type="hidden" name="userid" value="<?=$userfile->userid?>" />  
 		<label class="control-label" for="inputphone">Photo</label>
-		<img src="<?=$userfile->image?>" alt="Personal photo">
+		<img src="<?=base_url("/uploads/".$userfile->image)?>" alt="Personal photo">
 		<input type="file" name="userfile" size="20" />
 
 

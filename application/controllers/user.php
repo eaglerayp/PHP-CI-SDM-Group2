@@ -107,13 +107,32 @@
                 redirect(site_url("/user/login")); //轉回登入頁  
                 return true;  
             }  
+            $userid = trim($this->input->post("userid"));
+            if ($userid != $_SESSION["user"]->UserID ){  
+                show_404("User not authenticated !");  
+                //不是作者又想編輯，顯然是來亂的，送他回首頁。  
+                redirect(site_url("/"));   
+                return true;  
+            }  
+
             //edit implement
+/*inputpost=> file, and  "email","phone","address","phoneshow","addressshow","autobiography","usercategory","position","employer","positionshow","employershow","studentid"  */
+            $email = trim($this->input->post("email"));
+            $address = trim($this->input->post("address"));
+            $phone = trim($this->input->post("phone"));
+            $addressshow = trim($this->input->post("addressshow"));
+            $phoneshow = trim($this->input->post("phoneshow"));
+            $autobiography = trim($this->input->post("autobiography"));   
+            $usercategory = trim($this->input->post("usercategory"));
+            $position = trim($this->input->post("position"));   
+            $employer = trim($this->input->post("employer"));
+            $studentid = trim($this->input->post("studentid"));   
+
             //implement img upload
             $config['upload_path'] = '/uploads/';
             $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size'] = '100';
-            $config['max_width']  = '1024';
-            $config['max_height']  = '768';
+            $config['max_size'] = '2000';
+            $config['encrypt_name'] = TRUE;
 
             $this->load->library('upload',$config);
 
@@ -122,15 +141,18 @@
             }
             else{
                 $imgdata = array('upload_data' => $this->upload->data());
-                $imgpath = base_url("/uploads/".$img_data['file_name']);            
+                $imgpath = $img_data['file_name'];            
             }//end img part  insert imgpath to DB
 
 /*$img_data = array , keyname=attributes have 'file_name'  file_type is_image image_width image_heigth image_type   using as $img_data['filename'] 
 reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.html
 */
+            $this->load->model("UserModel");
+            //完成取資料動作
+            $this->UserModel->updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath); 
+            $this->UserModel->insertwork($userid,$position,$employer,$positionshow,$employershow);
+            $this->UserModel->insertstudentid($userid,$studentid);
 
-
-            $_SESSION["user"] = $user;
             $this->load->view('userfile',Array(  
             "pageTitle" => "Userifle"
             ));   //轉回file頁面
