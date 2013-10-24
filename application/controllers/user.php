@@ -108,9 +108,26 @@
                 return true;  
             }  
             //edit implement
-            $this->load->model("ArticleModel");  
-            //完成取資料動作  
-            $article = $this->ArticleModel->get($articleID);  
+            //implement img upload
+            $config['upload_path'] = '/uploads/';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size'] = '100';
+            $config['max_width']  = '1024';
+            $config['max_height']  = '768';
+
+            $this->load->library('upload',$config);
+
+            if ( ! $this->upload->do_upload()){
+                $error = array('error' => $this->upload->display_errors());
+            }
+            else{
+                $imgdata = array('upload_data' => $this->upload->data());
+                $imgpath = base_url("/uploads/".$img_data['file_name']);            
+            }//end img part  insert imgpath to DB
+
+/*$img_data = array , keyname=attributes have 'file_name'  file_type is_image image_width image_heigth image_type   using as $img_data['filename'] 
+reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.html
+*/
 
 
             $_SESSION["user"] = $user;
@@ -118,4 +135,7 @@
             "pageTitle" => "Userifle"
             ));   //轉回file頁面
         }//end logining
+
+
+
     }  
