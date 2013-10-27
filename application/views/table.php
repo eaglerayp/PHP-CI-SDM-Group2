@@ -8,7 +8,7 @@
     		
     		<?php foreach ($text as $element):?>
     		<tr>
-    			<td><a href= "<?=site_url("user/profile?=")?>"> <?php echo $element->username;?></a></td>
+    			<td><a href= "<?=site_url("user/profile?userID=".$element->userid)?>"> <?php echo $element->username;?></a></td>
     			<td><?php echo $element->studentid;?></td>
     		</tr>
     		<?php endforeach;?>
