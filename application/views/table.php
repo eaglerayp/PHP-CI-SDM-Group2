@@ -8,6 +8,12 @@
         cursor: pointer;
     }
 </style>
+<script type="text/javascript">
+    function linktoprofile(id){
+        var text = "<?=site_url("user/profile?userID=")?>" + id ;
+        location.replace(text);
+    }
+</script>
     <div class="container">
     	<table class="table"> 
             <thead>
@@ -18,11 +24,13 @@
     		</thead>
             <tbody>
         		<?php foreach ($text as $element):?>
-        		<tr class='tr_hover'>
-        			<td><a href= "<?=site_url("user/profile?=")?>"> <?php echo $element->username;?></a></td>
+        		<tr class='tr_hover' onclick="linktoprofile(<?php echo $element->userid;?>)">
+        			<td><?php echo $element->username;?></td>
         			<td><?php echo $element->studentid;?></td>
         		</tr>
         		<?php endforeach;?>
             </tbody>
     	</table>    
     </div>
+
+
