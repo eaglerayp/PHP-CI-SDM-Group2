@@ -4,6 +4,12 @@
 	
 	/* function for table.php */
     public function table(){
+    	/* Check whether the user login or not*/
+    	if (!isset($_SESSION["user"])){
+    		redirect(site_url("/user/login"));	// Redirect to the login page
+    		return true;
+    	}  //end if
+    	
 	    $this->load->model('listmodel','',TRUE);
 	    $rows = $this->listmodel->getRows();
 	    $rawdata = $this->listmodel->getData();

@@ -158,10 +158,12 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             ));   //轉回file頁面
         }//end logining
 
+
 	public function profile(){
         	if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁
         		redirect(site_url("/user/login")); //轉回登入頁
         		return true;
+
         	}
         	$account = $_SESSION["user"]->userid;
         	//id should load from total view
@@ -171,6 +173,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         		$this->edit();
         	}//check whether this user is the user himself or not
         	else {
+
         		$this->load->model("UserModel");
         		//完成取資料動作
         		$userfile = $this->UserModel->getUserfile($id);
@@ -187,3 +190,4 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         }
 
     }  
+
