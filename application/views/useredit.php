@@ -1,5 +1,5 @@
  <? /* php post parameter $userfile=SELECT * FROM user   $userwork=SELECT * FROM userwork $userstudentid=SELECT * FROM userstudentid
-    *$userfile   is php object  , attribute "userid" ,"username" ,"email","phone","address","phoneshow","addressshow" ,"autobiography","usercategory"
+    *$userfile   is php object  , attribute "userid" ,"username" ,"email","phone","address","phoneshow","addressshow" ,"autobiography","usercategory","image"
     *$userwork   is php array ,element is php object ,attribute "userid","position","employer","state", "positionshow","employershow"    
     *$userstudentid   is php array ,element is php object ,attribute "userid","studentid" */ ?>
 <?php 
@@ -11,7 +11,19 @@
 	<div class="container">
 		<legend>Edit User Profile</legend>
 		<h2><label><?=htmlspecialchars($userfile->username)?> file</label></h2>
-		<form class="form-horizontal" action="<?=site_url("user/editing")?>" method="post">
+
+
+		<?php if(isset($error)){echo $error;}?>
+
+
+		<?php echo form_open_multipart("user/editing");?>
+
+		<input type="hidden" name="userid" value="<?=$userfile->userid?>" />  
+		<label class="control-label" for="inputphone">Photo</label>
+		<img src="<?=base_url("/uploads/".$userfile->image)?>" alt="Personal photo">
+		<input type="file" name="userfile" size="20" />
+
+
 			<div class="control-group">
 			<label class="control-label" for="inputEmail">Email</label>
 			<div class="controls">
