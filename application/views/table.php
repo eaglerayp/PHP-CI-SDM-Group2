@@ -1,16 +1,36 @@
 <?php include("_header.php"); ?> 
+<style type="text/css">
+    .tr_hover {
+        /*background-color: black;*/
+    }
+    .tr_hover:hover {
+        background-color: #F5F5DC;
+        cursor: pointer;
+    }
+</style>
+<script type="text/javascript">
+    function linktoprofile(id){
+        var text = "<?=site_url("user/profile?userID=")?>" + id ;
+        location.replace(text);
+    }
+</script>
     <div class="container">
-    	<table border=1> 
-    		<tr>
-    			<td>Name</td>
-    			<td>StudentID</td>
-    		</tr>
-    		
-    		<?php foreach ($text as $element):?>
-    		<tr>
-    			<td><a href= "<?=site_url("user/profile?userID=".$element->userid)?>"> <?php echo $element->username;?></a></td>
-    			<td><?php echo $element->studentid;?></td>
-    		</tr>
-    		<?php endforeach;?>
+    	<table class="table"> 
+            <thead>
+        		<tr>
+        			<td>Name</td>
+        			<td>StudentID</td>
+        		</tr>
+    		</thead>
+            <tbody>
+        		<?php foreach ($text as $element):?>
+        		<tr class='tr_hover' onclick="linktoprofile(<?php echo $element->userid;?>)">
+        			<td><?php echo $element->username;?></td>
+        			<td><?php echo $element->studentid;?></td>
+        		</tr>
+        		<?php endforeach;?>
+            </tbody>
     	</table>    
     </div>
+
+
