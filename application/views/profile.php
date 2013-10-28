@@ -96,7 +96,7 @@
 	</div>
 	<div class='user_autobiography'>
 		<p>Autobiography：</p>
-		<?php echo $userfile->autobiography;?>
+		<?=nl2br(htmlspecialchars($userfile->autobiography))?>
 	</div>
 	<div>
 		
