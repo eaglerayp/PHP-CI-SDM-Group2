@@ -4,13 +4,34 @@
     *$userstudentid   is php array ,element is php object ,attribute "userid","studentid" */ ?>
 <?php 
 	$currentwork= array_pop($userwork);
-    $works = count ($userwork);
-    $ids = count($userstudentid);
 ?>
 <?php include("_header.php"); ?> 
+<?php include("_navbar.php"); ?>
+<script type="text/javascript">
+	$(document).ready(function() {
+        nav_click("nav_edit");
+    });
+</script>
+<style type="text/css">
+	#add_work {
+		cursor: pointer;
+		/*text-decoration: underline;*/
+		width: 100px;
+		max-width: 200px;
+	}
+	#add_studentid {
+		cursor: pointer;
+		/*text-decoration: underline;*/
+		width: 130px;
+		max-width: 200px;
+	}
+	h1 {
+		font-size: 40px;
+	}
+</style>
 	<div class="container">
-		<legend>Edit User Profile</legend>
-		<h2><label><?=htmlspecialchars($userfile->username)?> file</label></h2>
+		<!-- <legend>Edit User Profile</legend> -->
+		<h1><?=htmlspecialchars($userfile->username)?> file</h1>
 
 
 		<?php if(isset($error)){echo $error;}?>
@@ -18,9 +39,10 @@
 
 		<?php echo form_open_multipart("user/editing");?>
 
-		<input type="hidden" name="userid" value="<?=$userfile->userid?>" />  
+		<input type="hidden" name="fileuserid" value="<?=$userfile->userid?>" />  
 		<label class="control-label" for="inputphone">Photo</label>
 		<img src="<?=base_url("/uploads/".$userfile->image)?>" alt="Personal photo">
+		<input type="hidden" name="imgpath" value="<?=$userfile->image?>" /> 
 		<input type="file" name="userfile" size="20" />
 
 
@@ -29,53 +51,52 @@
 			<div class="controls">
 			<input type="text" name="Email" value="<?=htmlspecialchars($userfile->email)?>">
 			</div>
-			<?php if ($userfile->addressshow==1){?>
 			<label class="control-label" for="inputaddress">Postal Address</label>
 			<div class="controls">
 			<input type="text" name="address" value="<?=htmlspecialchars($userfile->address)?>">
+			<input type="checkbox" name="addressshow" value="1" <?php if ($userfile->addressshow==1){?>checked <?php } ?> >
 			</div>
-			<?php } ?> 
-			<?php if ($userfile->phoneshow==1){?>
+
+			
 			<label class="control-label" for="inputphone">Phone</label>
 			<div class="controls">
 			<input type="text" name="phone" value="<?=htmlspecialchars($userfile->phone)?>">
+			<input type="checkbox" name="phoneshow" value="1" <?php if ($userfile->phoneshow==1){?>checked <?php } ?> >
 			</div>
-			<?php } ?> 
 
 			
 			
-			<div class="controls">
-			<?php if($currentwork->positionshow==1){ ?>
+			<div class="controls">	
 			Current Postion
 			<input type="text" name="position" value="<?=htmlspecialchars($currentwork->position)?>">
-			<?php } ?> 
-			<?php if($currentwork->employershow==1){ ?>
+			<input type="checkbox" name="positionshow" value="1" <?php if($currentwork->positionshow==1){ ?>checked <?php } ?> >
 			Current employer
 			<input type="text" name="employer" value="<?=htmlspecialchars($currentwork->employer)?>">
-			<?php } ?> 
+			<input type="checkbox" name="employershow" value="1" <?php if($currentwork->employershow==1){ ?>checked <?php } ?> >
 			</div>
 			
-			
-			<?php foreach ($userwork as $newwork) { ?>
-			<div class="controls">
-			<?php if($newwork->positionshow==1){ ?>
-			Past Postion
-			<input type="text" name="position" value="<?=htmlspecialchars($newwork->position)?>">
-			<?php } ?> 
-			<?php if($newwork->employershow==1){ ?>
-			Past employer
-			<input type="text" name="employer" value="<?=htmlspecialchars($newwork->employer)?>">
-			<?php } ?> 
+			<div id='work_area'>
+				<?php foreach ($userwork as $newwork) { ?>
+				<div class="controls">
+				Past Postion
+				<input type="text" name="position" value="<?=htmlspecialchars($newwork->position)?>">
+				Past employer
+				<input type="text" name="employer" value="<?=htmlspecialchars($newwork->employer)?>">
+				</div>
+				<?php } ?> 
 			</div>
-			<?php } ?> 
-
+			<div id='add_work' ><a herf=''>add more work</a></div>	
+			<input type="hidden" name="addwork" value="0" />  
 			<label class="control-label" for="studentid">StudentID</label>
-			<?php foreach ($userstudentid as $id) { ?>
-			<div class="controls">
-			<input type="text" name="studentid" value="<?=htmlspecialchars($id->studentid)?>">
-			</div>
-			<?php } ?> 
-
+			<div id='studentid_area'>
+				<?php foreach ($userstudentid as $id) { ?>
+				<div class="controls">
+				<input type="text" name="studentid" value="<?=htmlspecialchars($id->studentid)?>">
+				</div>
+				<?php } ?>
+			</div> 
+			<div id='add_studentid' ><a herf=''>add more student id</a></div>
+			<input type="hidden" name="addid" value="0" />  
 			<div class="control-group">
 			<label class="control-label" for="inputautobiography">Autobiography</label>
 			<div class="controls">
@@ -85,8 +106,9 @@
 			</div>
 
 			</div>
-
+			<button id='send_edit_data' class="btn btn-info" type="submit">Edit Confirm</div>
 		</form>
+		
 	</div>
 	<script src="<?=base_url("/js/jquery.js")?>"></script>
     <script src="<?=base_url("/js/bootstrap-transition.js")?>"></script>
@@ -101,4 +123,29 @@
     <script src="<?=base_url("/js/bootstrap-collapse.js")?>"></script>
     <script src="<?=base_url("/js/bootstrap-carousel.js")?>"></script>
     <script src="<?=base_url("/js/bootstrap-typeahead.js")?>"></script>
+    <script type="text/javascript">
+    	$("#add_work").click(function(){
+    		var last_v = $("#work_area").children(".controls").last().children("input").last().val();
+    		if( last_v!="" ){
+    			var text = '<div class="controls">Past Postion&nbsp;<input type="text" name="position" value="">&nbsp;Past employer&nbsp;<input type="text" name="employer" value=""></div>';
+
+    			$("#work_area").append(text);
+    			// console.log(last_v);
+    		}
+    		// console.log(last_v);
+    		// console.log("click!");
+    	})
+    	$("#add_studentid").click(function(){
+    		var last_v = $("#studentid_area").children(".controls").last().children("input").last().val();
+    		if( last_v!="" ){
+    			var text = '<div class="controls"><input type="text" name="studentid" value=""></div>';
+
+    			$("#studentid_area").append(text);
+    			// console.log(last_v);
+    		}
+    		// console.log(last_v);
+    		// console.log("click!");
+    	})
+
+    </script>
 <?php include("_footer.php"); ?> 

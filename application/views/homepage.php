@@ -1,10 +1,15 @@
 <?php include("_header.php"); ?> 
 <?php include("_navbar.php"); ?> 
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        nav_click("nav_home");
+    });
+</script>
     <div class="container home"> 
         <div>  
             
-            <h1>Nothing~~ right now</h1>  
+            <h1>AlumniBook</h1>  
+            <h3>a Web-based system to interaction for "IM" People </h3>
         </div>  
     
 

@@ -48,6 +48,7 @@
 $active_group = 'default';
 $active_record = TRUE;
 
+
 $db['default']['hostname'] = 'sdm2.im.ntu.edu.tw';
 $db['default']['username'] = 'Group2';
 $db['default']['password'] = 'xu3jo6vmp6';
