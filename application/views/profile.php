@@ -23,7 +23,7 @@
 	}
 	.table {
 		position: relative;
-		right: 30px;
+		right: 100px;
 		top: 80px;
 		float: right;
 		width: 600px;
@@ -33,7 +33,7 @@
 		left: 50px;
 		top: 80px;
 		margin: 10px;
-		max-width: 1000px;
+		max-width: 1100px;
 	}
 </style>
 
