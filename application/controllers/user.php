@@ -157,10 +157,10 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             $this->load->model("UserModel");
             //完成取資料動作
             $this->UserModel->updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath); 
-            if($addwork==1){
+            if($addwork==1 && $position!=""){
                 $this->UserModel->insertwork($userid,$position,$employer,$positionshow,$employershow);
             }
-            if($addid==1){
+            if($addid==1 && $studentid!=""){
                 $this->UserModel->insertstudentid($userid,$studentid);
             }
             $userfile = $this->UserModel->getUserfile($userid); 
