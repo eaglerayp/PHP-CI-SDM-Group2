@@ -140,7 +140,7 @@
     		// console.log(last_v);
     		// console.log("click!");
     	})
-    	$("#add_studenidt").click(function(){
+    	$("#add_studentid").click(function(){
     		var last_v = $("#studentid_area").children(".controls").last().children("input").last().val();
     		if( last_v!="" ){
     			var text = '<div class="controls"><input type="text" name="studentid" value=""></div>';
