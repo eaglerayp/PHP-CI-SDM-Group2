@@ -5,6 +5,11 @@
 ?>
 <?php include("_header.php"); ?> 
 <?php include("_navbar.php"); ?> 
+<script type="text/javascript">
+	$(document).ready(function() {
+        nav_click("");
+    });
+</script>
 <style type="text/css">
 	.user_image {
 		position: relative;
