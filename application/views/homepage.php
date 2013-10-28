@@ -1,6 +1,10 @@
 <?php include("_header.php"); ?> 
 <?php include("_navbar.php"); ?> 
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        nav_click("nav_home");
+    });
+</script>
     <div class="container home"> 
         <div>  
             

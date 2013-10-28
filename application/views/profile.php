@@ -4,8 +4,36 @@
     $ids = count($userstudentid);
 ?>
 <?php include("_header.php"); ?> 
+<?php include("_navbar.php"); ?> 
+<style type="text/css">
+	.user_image {
+		position: relative;
+		left: 50px;
+		top:50px;
+		margin: 10px;
+	}
+	.user_image > img {
+		width: 400px;
+		height: 300px;
+	}
+	.table {
+		position: relative;
+		right: 30px;
+		top: 80px;
+		float: right;
+		width: 600px;
+	}
+	.user_autobiography {
+		position: relative;
+		left: 50px;
+		top: 80px;
+		margin: 10px;
+		max-width: 1000px;
+	}
+</style>
 
-		<table border='1'>
+	<div class='user_profile'>
+		<table class='table'>
 			<tr>
 				<td>Username</td>
 				<td><?php echo $userfile->username;?></td>
@@ -32,10 +60,10 @@
 				<td>Email</td>
 				<td><?php echo $userfile->email;?></td>
 			</tr>
-			<tr>
+<!-- 			<tr>
 				<td>Autobiography</td>
 				<td><?php echo $userfile->autobiography;?></td>
-			</tr>
+			</tr> -->
 			<tr>
 				<td>Usercategory</td>
 				<td><?php echo $userfile->usercategory;?></td>
@@ -57,6 +85,14 @@
 			</tr>
 			<?php }?>
 		</table>
+	</div>
+	<div class='user_image'>
+		<img src="<?=base_url("/uploads/".$userfile->image)?>" alt="Personal photo">
+	</div>
+	<div class='user_autobiography'>
+		<p>Autobiography：</p>
+		<?php echo $userfile->autobiography;?>
+	</div>
 	<div>
 		
 	</div>

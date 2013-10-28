@@ -1,4 +1,5 @@
 <?php include("_header.php"); ?> 
+<?php include("_navbar.php"); ?>
 <style type="text/css">
     .tr_hover {
         /*background-color: black;*/
@@ -13,6 +14,9 @@
         var text = "<?=site_url("user/profile?userID=")?>" + id ;
         location.replace(text);
     }
+    $(document).ready(function() {
+        nav_click("nav_viewlist");
+    });
 </script>
     <div class="container">
     	<table class="table"> 

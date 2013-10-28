@@ -8,6 +8,7 @@
     $ids = count($userstudentid);
 ?>
 <?php include("_header.php"); ?> 
+<?php include("_navbar.php"); ?>
 	<div class="container">
 		<legend>Edit User Profile</legend>
 		<h2><label><?=htmlspecialchars($userfile->username)?> file</label></h2>
