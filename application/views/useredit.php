@@ -114,7 +114,7 @@
     	$("#add_work").click(function(){
     		var last_v = $("#work_area").children(".controls").last().children("input").last().val();
     		if( last_v!="" ){
-    			var text = '<div class="controls">Past Postion<input type="text" name="position" value="">Past employer<input type="text" name="employer" value=""></div>';
+    			var text = '<div class="controls">Past Postion&nbsp;<input type="text" name="position" value="">&nbsp;Past employer&nbsp;<input type="text" name="employer" value=""></div>';
 
     			$("#work_area").append(text);
     			// console.log(last_v);
