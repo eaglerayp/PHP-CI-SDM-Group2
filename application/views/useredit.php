@@ -14,9 +14,26 @@
         nav_click("nav_edit");
     });
 </script>
+<style type="text/css">
+	#add_work {
+		cursor: pointer;
+		/*text-decoration: underline;*/
+		width: 100px;
+		max-width: 200px;
+	}
+	#add_studentid {
+		cursor: pointer;
+		/*text-decoration: underline;*/
+		width: 130px;
+		max-width: 200px;
+	}
+	h1 {
+		font-size: 40px;
+	}
+</style>
 	<div class="container">
 		<!-- <legend>Edit User Profile</legend> -->
-		<h1><label><?=htmlspecialchars($userfile->username)?> file</label></h1>
+		<h1><?=htmlspecialchars($userfile->username)?> file</h1>
 
 
 		<?php if(isset($error)){echo $error;}?>
@@ -75,7 +92,7 @@
 				</div>
 				<?php } ?> 
 			</div>
-			<div id='add_work' class="btn btn-info">add work</div>	
+			<div id='add_work' ><a herf=''>add more work</a></div>	
 			<label class="control-label" for="studentid">StudentID</label>
 			<div id='studentid_area'>
 				<?php foreach ($userstudentid as $id) { ?>
@@ -84,7 +101,7 @@
 				</div>
 				<?php } ?>
 			</div> 
-			<div id='add_studenid' class="btn btn-info">add student id</div>
+			<div id='add_studentid' ><a herf=''>add more student id</a></div>
 			<div class="control-group">
 			<label class="control-label" for="inputautobiography">Autobiography</label>
 			<div class="controls">
@@ -96,6 +113,7 @@
 			</div>
 
 		</form>
+		<div id='send_edit_data' class="btn btn-info">Edit Confirm</div>
 	</div>
 	<script src="<?=base_url("/js/jquery.js")?>"></script>
     <script src="<?=base_url("/js/bootstrap-transition.js")?>"></script>
@@ -122,7 +140,7 @@
     		// console.log(last_v);
     		// console.log("click!");
     	})
-    	$("#add_studenid").click(function(){
+    	$("#add_studenidt").click(function(){
     		var last_v = $("#studentid_area").children(".controls").last().children("input").last().val();
     		if( last_v!="" ){
     			var text = '<div class="controls"><input type="text" name="studentid" value=""></div>';
