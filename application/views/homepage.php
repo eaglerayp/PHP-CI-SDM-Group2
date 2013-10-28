@@ -8,7 +8,8 @@
     <div class="container home"> 
         <div>  
             
-            <h1>Nothing~~ right now</h1>  
+            <h1>AlumniBook</h1>  
+            <h3>a Web-based system to interaction for "IM" People </h3>
         </div>  
     
 
