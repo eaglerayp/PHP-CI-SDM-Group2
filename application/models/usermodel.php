@@ -98,7 +98,7 @@
             $this->db->insert("userstudentid",   
             Array(  
             "userid" =>  $userid,  
-            "userstudentid" => $userstudentid
+            "studentid" => $userstudentid
         ));  
         } 
     }  

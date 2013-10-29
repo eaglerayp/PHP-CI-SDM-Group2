@@ -4,8 +4,6 @@
     *$userstudentid   is php array ,element is php object ,attribute "userid","studentid" */ ?>
 <?php 
 	$currentwork= array_pop($userwork);
-    $works = count ($userwork);
-    $ids = count($userstudentid);
 ?>
 <?php include("_header.php"); ?> 
 <?php include("_navbar.php"); ?>
@@ -41,9 +39,10 @@
 
 		<?php echo form_open_multipart("user/editing");?>
 
-		<input type="hidden" name="userid" value="<?=$userfile->userid?>" />  
+		<input type="hidden" name="fileuserid" value="<?=$userfile->userid?>" />  
 		<label class="control-label" for="inputphone">Photo</label>
 		<img src="<?=base_url("/uploads/".$userfile->image)?>" alt="Personal photo">
+		<input type="hidden" name="imgpath" value="<?=$userfile->image?>" /> 
 		<input type="file" name="userfile" size="20" />
 
 
@@ -52,47 +51,42 @@
 			<div class="controls">
 			<input type="text" name="Email" value="<?=htmlspecialchars($userfile->email)?>">
 			</div>
-			<?php if ($userfile->addressshow==1){?>
 			<label class="control-label" for="inputaddress">Postal Address</label>
 			<div class="controls">
 			<input type="text" name="address" value="<?=htmlspecialchars($userfile->address)?>">
+			<input type="checkbox" name="addressshow" value="1" <?php if ($userfile->addressshow==1){?>checked <?php } ?> >
 			</div>
-			<?php } ?> 
-			<?php if ($userfile->phoneshow==1){?>
+
+			
 			<label class="control-label" for="inputphone">Phone</label>
 			<div class="controls">
 			<input type="text" name="phone" value="<?=htmlspecialchars($userfile->phone)?>">
+			<input type="checkbox" name="phoneshow" value="1" <?php if ($userfile->phoneshow==1){?>checked <?php } ?> >
 			</div>
-			<?php } ?> 
 
 			
 			
-			<div class="controls">
-			<?php if($currentwork->positionshow==1){ ?>
+			<div class="controls">	
 			Current Postion
 			<input type="text" name="position" value="<?=htmlspecialchars($currentwork->position)?>">
-			<?php } ?> 
-			<?php if($currentwork->employershow==1){ ?>
+			<input type="checkbox" name="positionshow" value="1" <?php if($currentwork->positionshow==1){ ?>checked <?php } ?> >
 			Current employer
 			<input type="text" name="employer" value="<?=htmlspecialchars($currentwork->employer)?>">
-			<?php } ?> 
+			<input type="checkbox" name="employershow" value="1" <?php if($currentwork->employershow==1){ ?>checked <?php } ?> >
 			</div>
 			
 			<div id='work_area'>
 				<?php foreach ($userwork as $newwork) { ?>
 				<div class="controls">
-				<?php if($newwork->positionshow==1){ ?>
 				Past Postion
 				<input type="text" name="position" value="<?=htmlspecialchars($newwork->position)?>">
-				<?php } ?> 
-				<?php if($newwork->employershow==1){ ?>
 				Past employer
 				<input type="text" name="employer" value="<?=htmlspecialchars($newwork->employer)?>">
-				<?php } ?> 
 				</div>
 				<?php } ?> 
 			</div>
 			<div id='add_work' ><a herf=''>add more work</a></div>	
+			<input type="hidden" name="addwork" value="0" />  
 			<label class="control-label" for="studentid">StudentID</label>
 			<div id='studentid_area'>
 				<?php foreach ($userstudentid as $id) { ?>
@@ -102,6 +96,7 @@
 				<?php } ?>
 			</div> 
 			<div id='add_studentid' ><a herf=''>add more student id</a></div>
+			<input type="hidden" name="addid" value="0" />  
 			<div class="control-group">
 			<label class="control-label" for="inputautobiography">Autobiography</label>
 			<div class="controls">
@@ -111,9 +106,9 @@
 			</div>
 
 			</div>
-
+			<button id='send_edit_data' class="btn btn-info" type="submit">Edit Confirm</div>
 		</form>
-		<div id='send_edit_data' class="btn btn-info">Edit Confirm</div>
+		
 	</div>
 	<script src="<?=base_url("/js/jquery.js")?>"></script>
     <script src="<?=base_url("/js/bootstrap-transition.js")?>"></script>
@@ -135,6 +130,7 @@
     			var text = '<div class="controls">Past Postion&nbsp;<input type="text" name="position" value="">&nbsp;Past employer&nbsp;<input type="text" name="employer" value=""></div>';
 
     			$("#work_area").append(text);
+    			$("input[name=addwork]").val(1);
     			// console.log(last_v);
     		}
     		// console.log(last_v);
@@ -146,6 +142,7 @@
     			var text = '<div class="controls"><input type="text" name="studentid" value=""></div>';
 
     			$("#studentid_area").append(text);
+    			$("input[name=addid]").val(1);
     			// console.log(last_v);
     		}
     		// console.log(last_v);

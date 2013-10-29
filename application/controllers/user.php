@@ -107,8 +107,8 @@
                 redirect(site_url("/user/login")); //轉回登入頁  
                 return true;  
             }  
-            $userid = trim($this->input->post("userid"));
-            if ($userid != $_SESSION["user"]->UserID ){  
+            $userid = trim($this->input->post("fileuserid"));
+            if ($userid != $_SESSION["user"]->userid ){  
                 show_404("User not authenticated !");  
                 //不是作者又想編輯，顯然是來亂的，送他回首頁。  
                 redirect(site_url("/"));   
@@ -116,7 +116,8 @@
             }  
 
             //edit implement
-/*inputpost=> file, and  "email","phone","address","phoneshow","addressshow","autobiography","usercategory","position","employer","positionshow","employershow","studentid"  */
+/*inputpost=> file, 
+and  "email","phone","address","phoneshow","addressshow","autobiography","usercategory","position","employer","positionshow","employershow","studentid","addid","addwork","imgpath"*/
             $email = trim($this->input->post("email"));
             $address = trim($this->input->post("address"));
             $phone = trim($this->input->post("phone"));
@@ -127,6 +128,12 @@
             $position = trim($this->input->post("position"));   
             $employer = trim($this->input->post("employer"));
             $studentid = trim($this->input->post("studentid"));   
+            $positionshow = trim($this->input->post("positionshow"));   
+            $employershow= trim($this->input->post("employershow"));   
+            $addwork = trim($this->input->post("addwork"));   
+            $addid= trim($this->input->post("addid"));   
+            $imgpath= trim($this->input->post("imgpath"));   
+
 
             //implement img upload
             $config['upload_path'] = '/uploads/';
@@ -150,11 +157,22 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             $this->load->model("UserModel");
             //完成取資料動作
             $this->UserModel->updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath); 
-            $this->UserModel->insertwork($userid,$position,$employer,$positionshow,$employershow);
-            $this->UserModel->insertstudentid($userid,$studentid);
+            if($addwork==1 && $position!=""){
+                $this->UserModel->insertwork($userid,$position,$employer,$positionshow,$employershow);
+            }
+            if($addid==1 && $studentid!=""){
+                $this->UserModel->insertstudentid($userid,$studentid);
+            }
+            $userfile = $this->UserModel->getUserfile($userid); 
+            $userwork = $this->UserModel->getUserwork($userid); 
+            $userstudentid = $this->UserModel->getUserstudentid($userid); 
 
-            $this->load->view('userfile',Array(  
-            "pageTitle" => "Userifle"
+            $this->load->view('profile',Array(  
+            "pageTitle" => "Userifle",
+            "userwork" => $userwork,
+            "userstudentid" => $userstudentid,
+            "userfile" => $userfile,
+            "account" => $userid
             ));   //轉回file頁面
         }//end logining
 

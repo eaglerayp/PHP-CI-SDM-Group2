@@ -28,7 +28,7 @@
     		</thead>
             <tbody>
         		<?php foreach ($text as $element):?>
-        		<tr class='tr_hover' onclick="linktoprofile(<?php echo $element->userid;?>)">
+        		<tr class='tr_hover' onclick="linktoprofile('<?php echo $element->userid;?>')">
         			<td><?php echo $element->username;?></td>
         			<td><?php echo $element->studentid;?></td>
         		</tr>
