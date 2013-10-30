@@ -136,19 +136,22 @@ and  "email","phone","address","phoneshow","addressshow","autobiography","userca
 
 
             //implement img upload
-            $config['upload_path'] = '/uploads/';
+            $config['upload_path'] = './uploads/';
             $config['allowed_types'] = 'gif|jpg|png';
-            $config['max_size'] = '2000';
+            $config['max_size'] = '2048';
             $config['encrypt_name'] = TRUE;
 
             $this->load->library('upload',$config);
 
             if ( ! $this->upload->do_upload()){
-                $error = array('error' => $this->upload->display_errors());
+                $error =  $this->upload->display_errors();
+                if($error =="<p>You did not select a file to upload.</p>"){
+                    $error= null;
+                }
             }
             else{
-                $imgdata = array('upload_data' => $this->upload->data());
-                $imgpath = $img_data['file_name'];            
+                $imgdata = $this->upload->data();
+                $imgpath = $imgdata['file_name'];            
             }//end img part  insert imgpath to DB
 
 /*$img_data = array , keyname=attributes have 'file_name'  file_type is_image image_width image_heigth image_type   using as $img_data['filename'] 
@@ -156,9 +159,9 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
 */
             $this->load->model("UserModel");
             //完成取資料動作
-            $this->UserModel->updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath); 
+            $this->UserModel->updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath,$positionshow,$employershow); 
             if($addwork==1 && $position!=""){
-                $this->UserModel->insertwork($userid,$position,$employer,$positionshow,$employershow);
+                $this->UserModel->insertwork($userid,$position,$employer);
             }
             if($addid==1 && $studentid!=""){
                 $this->UserModel->insertstudentid($userid,$studentid);
@@ -172,7 +175,8 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             "userwork" => $userwork,
             "userstudentid" => $userstudentid,
             "userfile" => $userfile,
-            "account" => $userid
+            "account" => $userid,
+            "error" => $error
             ));   //轉回file頁面
         }//end logining
 
@@ -202,7 +206,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         				"userwork" => $userwork,
         				"userstudentid" => $userstudentid,
         				"userfile" => $userfile,
-        				"account" => $account
+        				"account" => $account,
         		));
         	}
         }

@@ -1,9 +1,13 @@
  <? /* php post parameter $userfile=SELECT * FROM user   $userwork=SELECT * FROM userwork $userstudentid=SELECT * FROM userstudentid
-    *$userfile   is php object  , attribute "userid" ,"username" ,"email","phone","address","phoneshow","addressshow" ,"autobiography","usercategory","image"
-    *$userwork   is php array ,element is php object ,attribute "userid","position","employer","state", "positionshow","employershow"    
+    *$userfile   is php object  , attribute "userid" ,"username" ,"email","phone","address","phoneshow","addressshow" ,"autobiography","usercategory","image", "positionshow","employershow" 
+    *$userwork   is php array ,element is php object ,attribute "userid","position","employer","state"   
     *$userstudentid   is php array ,element is php object ,attribute "userid","studentid" */ ?>
 <?php 
-	$currentwork= array_pop($userwork);
+	if($userwork!=null){
+		$currentwork= array_pop($userwork);
+	}else{
+		$currentwork= (object) array('position' => '', 'employer' => '');
+	}
 ?>
 <?php include("_header.php"); ?> 
 <?php include("_navbar.php"); ?>
@@ -69,31 +73,38 @@
 			<div class="controls">	
 			Current Postion
 			<input type="text" name="position" value="<?=htmlspecialchars($currentwork->position)?>">
-			<input type="checkbox" name="positionshow" value="1" <?php if($currentwork->positionshow==1){ ?>checked <?php } ?> >
+			<input type="checkbox" name="positionshow" value="1" <?php if($userfile->positionshow==1){ ?>checked <?php } ?> >
 			Current employer
 			<input type="text" name="employer" value="<?=htmlspecialchars($currentwork->employer)?>">
-			<input type="checkbox" name="employershow" value="1" <?php if($currentwork->employershow==1){ ?>checked <?php } ?> >
+			<input type="checkbox" name="employershow" value="1" <?php if($userfile->employershow==1){ ?>checked <?php } ?> >
 			</div>
 			
 			<div id='work_area'>
-				<?php foreach ($userwork as $newwork) { ?>
+
+				<?php 
+				if($userwork!=null){
+				foreach ($userwork as $newwork) { ?>
 				<div class="controls">
-				Past Postion
-				<input type="text" name="position" value="<?=htmlspecialchars($newwork->position)?>">
-				Past employer
-				<input type="text" name="employer" value="<?=htmlspecialchars($newwork->employer)?>">
+				Past Postion : 
+				<span style='font-size:26px'><?=htmlspecialchars($newwork->position)?></span>
+				Past employer : 
+				<span style='font-size:26px'><?=htmlspecialchars($newwork->employer)?></span>
 				</div>
-				<?php } ?> 
+				<?php }
+				} ?> 
 			</div>
 			<div id='add_work' ><a herf=''>add more work</a></div>	
 			<input type="hidden" name="addwork" value="0" />  
 			<label class="control-label" for="studentid">StudentID</label>
 			<div id='studentid_area'>
-				<?php foreach ($userstudentid as $id) { ?>
+				<?php 
+				if($userstudentid!=null){
+				foreach ($userstudentid as $id) { ?>
 				<div class="controls">
 				<input type="text" name="studentid" value="<?=htmlspecialchars($id->studentid)?>">
 				</div>
-				<?php } ?>
+				<?php }
+				} ?>
 			</div> 
 			<div id='add_studentid' ><a herf=''>add more student id</a></div>
 			<input type="hidden" name="addid" value="0" />  
@@ -127,9 +138,10 @@
     	$("#add_work").click(function(){
     		var last_v = $("#work_area").children(".controls").last().children("input").last().val();
     		if( last_v!="" ){
-    			var text = '<div class="controls">Past Postion&nbsp;<input type="text" name="position" value="">&nbsp;Past employer&nbsp;<input type="text" name="employer" value=""></div>';
+    			var text = '<div class="controls">Postion&nbsp;<input type="text" name="position" value="">&nbsp;employer&nbsp;<input type="text" name="employer" value=""></div>';
 
     			$("#work_area").append(text);
+    			$("input[name=addwork]").val(1);
     			// console.log(last_v);
     		}
     		// console.log(last_v);
@@ -141,6 +153,7 @@
     			var text = '<div class="controls"><input type="text" name="studentid" value=""></div>';
 
     			$("#studentid_area").append(text);
+    			$("input[name=addid]").val(1);
     			// console.log(last_v);
     		}
     		// console.log(last_v);
