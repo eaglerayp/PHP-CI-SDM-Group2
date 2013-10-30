@@ -1,7 +1,9 @@
 <?php 
-	$currentwork= array_pop($userwork);
-    $works = count ($userwork);
-    $ids = count($userstudentid);
+	if($userwork!=null){
+		$currentwork= array_pop($userwork);
+	}else{
+		$currentwork= (object) array('position' => '', 'employer' => '');
+	}
 ?>
 <?php include("_header.php"); ?> 
 <?php include("_navbar.php"); ?> 
@@ -45,9 +47,12 @@
 			</tr>
 			<tr>
 				<td>Student ID</td>
-				<td><?php foreach ($userstudentid as $id) { 
-					echo "$id->studentid ";
-				}?>
+				<td><?php 
+					if($userstudentid!=null){
+						foreach ($userstudentid as $id) { 
+							echo "$id->studentid ";
+						}
+					}?>
 			</tr>
 			<?php if ( $userfile->addressshow == 1 ){ ?>
 			<tr>
@@ -77,13 +82,13 @@
 				<td>Image</td>
 				<td><?php echo $image;?></td>
 			</tr>*/?>
-			<?php if ( $currentwork->positionshow == 1 ){ ?>
+			<?php if ($userfile->positionshow == 1 ){ ?>
 			<tr>
 				<td>Current Postion</td>
 				<td><?php echo $currentwork->position; ?></td>
 			</tr>
 			<?php }?>
-			<?php if(($currentwork->employershow==1)){ ?>
+			<?php if($userfile->employershow==1){ ?>
 			<tr>
 				<td>Current employer</td>
 				<td><?php  echo $currentwork->employer;?></td>
@@ -92,6 +97,8 @@
 		</table>
 	</div>
 	<div class='user_image'>
+		<?php if(isset($error)){echo $error;}?>
+
 		<img src="<?=base_url("/uploads/".$userfile->image)?>" alt="Personal photo">
 	</div>
 	<div class='user_autobiography'>

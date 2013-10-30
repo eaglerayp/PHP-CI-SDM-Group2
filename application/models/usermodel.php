@@ -45,8 +45,9 @@
 
         function getUserwork($account){  
             $this->db->select("*");  
+            $this->db->order_by("state", "asc"); 
             $query = $this->db->get_where("userwork",Array("userid" => $account));  
-      
+            
             if ($query->num_rows() > 0){ //如果數量大於0  
                 return $query->result();  //回傳全部
             }
@@ -58,7 +59,7 @@
         function getUserstudentid($account){  
             $this->db->select("*");  
             $query = $this->db->get_where("userstudentid",Array("userid" => $account));  
-      
+        
             if ($query->num_rows() > 0){ //如果數量大於0  
                 return $query->result();  //回傳全部
             }
@@ -67,7 +68,7 @@
             }  
         }
 
-        function updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath){
+        function updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath,$positionshow,$employershow){
             $data = array(
             'email' => $email,
             'address' => $address,
@@ -76,21 +77,21 @@
             'phoneshow' => $phoneshow,
             'autobiography' => $autobiography,
             'usercategory' => $usercategory,
-            'image' => $imgpath
+            'image' => $imgpath,
+            'positionshow' => $positionshow,
+            'employershow'=> $employershow  
             );
 
             $this->db->where('userid', $userid);
             $this->db->update('user', $data);
         }
 
-        function insertwork($userid,$position,$employer,$positionshow,$employershow){  
+        function insertwork($userid,$position,$employer){  
             $this->db->insert("userwork",   
             Array(  
             "userid" =>  $userid,  
             "position" => $position,
-            "employer" => $employer,
-            "positionshow" => $positionshow,
-            "employershow"=> $employershow  
+            "employer" => $employer
         ));  
         }
 
