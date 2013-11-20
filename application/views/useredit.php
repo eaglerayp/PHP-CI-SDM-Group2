@@ -6,7 +6,7 @@
 	if($userwork!=null){
 		$currentwork= array_pop($userwork);
 	}else{
-		$currentwork= (object) array('position' => '', 'employer' => '');
+		$currentwork= (object) array('position' => '', 'employer' => '','state'=>'');
 	}
 ?>
 <?php include("_header.php"); ?> 
@@ -71,11 +71,12 @@
 			
 			
 			<div class="controls">	
+			<input type="hidden" name="currentstate" value="<?=$currentwork->state?>" />  
 			Current Postion
-			<input type="text" name="position" value="<?=htmlspecialchars($currentwork->position)?>">
+			<input type="text" name="currentposition" value="<?=htmlspecialchars($currentwork->position)?>">
 			<input type="checkbox" name="positionshow" value="1" <?php if($userfile->positionshow==1){ ?>checked <?php } ?> >
 			Current employer
-			<input type="text" name="employer" value="<?=htmlspecialchars($currentwork->employer)?>">
+			<input type="text" name="currentemployer" value="<?=htmlspecialchars($currentwork->employer)?>">
 			<input type="checkbox" name="employershow" value="1" <?php if($userfile->employershow==1){ ?>checked <?php } ?> >
 			</div>
 			
