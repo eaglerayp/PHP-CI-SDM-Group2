@@ -95,6 +95,11 @@
 			</tr>
 			<?php }?>
 		</table>
+
+
+
+
+
 	</div>
 	<div class='user_image'>
 		<?php if(isset($error)){echo $error;}?>
@@ -106,5 +111,31 @@
 		<?=nl2br(htmlspecialchars($userfile->autobiography))?>
 	</div>
 	<div>
+				<!--NEW ADDING FOR USER ISSUES -->
+		<?php if(count($issues) == 0 ){ ?>  
+                 
+        <?php }else{ ?>  
+		<table class="table">   
+                <tr>  
+                    <td>標題</td>   
+                    <td>點閱次數</td>
+                    <td>發表時間</td>   
+                </tr>  
+                <?php foreach ($issues as $article) {   ?>  
+                <tr>  
+                    <td>  
+                        <a href="<?=site_url("issue/view/".$article->IssueID)?>">  
+                            <?=htmlspecialchars($article->Title)?>  
+                        </a>  
+                    </td>   
+                    <td>  
+                        <?=htmlspecialchars($article->views)?>  
+                    </td>
+                    <td>  
+                        <?=htmlspecialchars($article->timestamp)?>  
+                    </td>    
+                <?php }//endfor ?>  
+            </table>  
+         <?php }  //end else ?>  
 		
 	</div>

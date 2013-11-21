@@ -182,6 +182,10 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             $userwork = $this->UserModel->getUserwork($userid); 
             $userstudentid = $this->UserModel->getUserstudentid($userid); 
 
+            //取得此使用者的發文紀錄
+            $this->load->model("IssueModel");
+            $userpost = $this->IssueModel->getUserIssues($userid);
+
 
             $this->load->view('profile',Array(  
             "pageTitle" => "Userifle",
@@ -189,6 +193,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             "userstudentid" => $userstudentid,
             "userfile" => $userfile,
             "account" => $userid,
+            "issues" => $userpost,
             "error" => $error
             ));   //轉回file頁面
         }//end logining
@@ -215,14 +220,20 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         		$userwork = $this->UserModel->getUserwork($id);
         		$userstudentid = $this->UserModel->getUserstudentid($id);
         		 
+
+                //取得此使用者的發文紀錄
+                $this->load->model("IssueModel");
+                $userpost = $this->IssueModel->getUserIssues($id);
+
         		$this->load->view('profile',Array(
         				"userwork" => $userwork,
         				"userstudentid" => $userstudentid,
         				"userfile" => $userfile,
         				"account" => $account,
+                        "issues" => $userpost
         		));
         	}
         }
 
     }  
-
+?>
