@@ -102,4 +102,14 @@
             "studentid" => $userstudentid
         ));  
         } 
+
+        function updateCurrentwork($userid,$currentposition,$currentemployer,$currentstate){
+            $data = array(
+                'position' => $currentposition,
+                'employer' => $currentemployer
+            );
+            $this->db->where('userid', $userid);
+            $this->db->where('state', $currentstate);
+            $this->db->update('userwork', $data);
+        }
     }  

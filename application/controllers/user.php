@@ -117,7 +117,8 @@
 
             //edit implement
 /*inputpost=> file, 
-and  "email","phone","address","phoneshow","addressshow","autobiography","usercategory","position","employer","positionshow","employershow","studentid","addid","addwork","imgpath"*/
+and  "email","phone","address","phoneshow","addressshow","autobiography","usercategory","position","employer","positionshow","employershow","studentid","addid","addwork","imgpath"
+"currentposition" ,"currentemployer","currentstate","currentoldposition","currentoldemployer"*/
             $email = trim($this->input->post("email"));
             $address = trim($this->input->post("address"));
             $phone = trim($this->input->post("phone"));
@@ -132,7 +133,12 @@ and  "email","phone","address","phoneshow","addressshow","autobiography","userca
             $employershow= trim($this->input->post("employershow"));   
             $addwork = trim($this->input->post("addwork"));   
             $addid= trim($this->input->post("addid"));   
-            $imgpath= trim($this->input->post("imgpath"));   
+            $imgpath= trim($this->input->post("imgpath"));  
+            $currentposition= trim($this->input->post("currentposition"));  
+            $currentemployer= trim($this->input->post("currentemployer")); 
+            $currentstate= trim($this->input->post("currentstate"));  
+            $currentoldposition= trim($this->input->post("currentoldposition"));  
+            $currentoldemployer= trim($this->input->post("currentoldemployer")); 
 
 
             //implement img upload
@@ -166,9 +172,16 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             if($addid==1 && $studentid!=""){
                 $this->UserModel->insertstudentid($userid,$studentid);
             }
+            if($currentemployer!="" || $currentposition!=""){
+                if($currentemployer!=$currentoldemployer || $currentposition!=$currentoldposition){
+                    $this->UserModel->updateCurrentwork($userid,$currentposition,$currentemployer,$currentstate);
+                }
+            }
+            
             $userfile = $this->UserModel->getUserfile($userid); 
             $userwork = $this->UserModel->getUserwork($userid); 
             $userstudentid = $this->UserModel->getUserstudentid($userid); 
+
 
             $this->load->view('profile',Array(  
             "pageTitle" => "Userifle",
