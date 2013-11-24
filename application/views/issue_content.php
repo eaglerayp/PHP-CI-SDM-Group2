@@ -28,18 +28,29 @@
 
 <style type="text/css">
 	#mainframe{
-		/*background-color: #ffffff;*/
+		background-color: #ffffff;
 		position: absolute;
 		/*top: 0%;*/
 		/*height: 100%;*/
 		left: 10%;
-		width: 80%;
+		width: 70%;
 		/*box-shadow:4px 4px 3px rgba(20%,20%,40%,0.5);*/
 		/*overflow: auto;*/
-		/*padding-bottom: 13%;*/
+		padding-left: 5%;
+		padding-right: 5%;
+		padding-bottom: 10%;
 	}
-	#page-header{
-		display: inline;
+	#reply{
+		position: fixed;
+		bottom: 0%;
+		left: 10%;
+		width: 80%;
+		background-color: #f5f5f5;
+	}
+	#comment{
+		width: 90%;
+		position:relative;
+		left: 5%;
 	}
 
 </style>
