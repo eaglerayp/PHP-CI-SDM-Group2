@@ -1,6 +1,4 @@
 
-
-
 	<?php include("_header.php"); ?> 
 	<?php include("_navbar.php"); ?> 
 
@@ -40,87 +38,73 @@
 		/*overflow: auto;*/
 		/*padding-bottom: 13%;*/
 	}
+	#page-header{
+		display: inline;
+	}
 
 </style>
 
 	<div id="mainframe">
-		<?php
-			// $link_ID = mysql_connect("localhost", "root", "root") or die('Error with MySQL connection' . mysql_error());
-			$link_ID = mysqli_connect("140.112.106.48", "R02725004", "julia0514", "R02725004") or die('Error with MySQL connection' . mysql_error());
-			mysqli_query($link_ID, "SET CHARACTER SET UTF8;"); 
-			$query = "SELECT * FROM `Issues` WHERE issue_id=" . $id;
-			$result = mysqli_query($link_ID, $query);
-			$issue = mysqli_fetch_array($result);
-			$query = "SELECT * FROM `Comments` WHERE issue_id=" . $issue["issue_id"];
-			$result = mysqli_query($link_ID, $query);
-
-			
-			mysqli_close($link_ID);
-		?>
-		<!-- <div>
-			<div class="col-md-offset-1 col-md-9">
-				<h1>Discussion</h1>	
-			</div>
-			<div class="col-md-offset-9 col-md-3">
-				<h5>Author</h5>
-			</div>
-		</div> -->
 		<div class="page-header col-md-offset-1 col-md-9">
 			<?php
-				echo "<h1>". $issue["title"] . "  <small> by " . $issue["author"] . "</small></h1>"
+				echo "<h1>". $issue->title . "  <small> by " . $author . "</small></h1> ";
+				echo "<h3><small> " . $issue->timestamp ."</small></h3>";
+				echo "<h3><small> ";
+				if($tagArray!=null){
+					echo "tag: ";
+					foreach($tagArray as $tag){
+						echo $tag;
+						echo " ";
+					}
+				}
+				echo "</small></h3>";
 			?>
 		</div>
 		
 		<div id="issue" class="col-md-offset-1  col-lg-10">
 			<p>
 				<?php
-					echo $issue["content"];
+					echo $issue->content;
+					// echo str_replace("\n", '<\ br>', $issue->content);
 				?>
-			<!-- Hello,
-
-			First i'd like to thanks for all your (freebsd FreeBSD folks) recent valuable help. I've learned a lot already, but still is much to do. I've some problems with running Nginx + PHP-FPM. I can't run any .php scripts using a web browser. Instead of running index.php the web browser just downloads this script. 
-
-			PHP-FPM is started and listening on port 9000. -->
 			</p>
 		</div>
 
 
-		<?php
-			while ($record = mysqli_fetch_array($result)){
-				echo "<div class='comment col-md-offset-2 col-md-9'>";
-				echo "	<hr />";
-				echo "	<p>";
-				echo $record["content"];
-				echo "	</p>";
-				echo "	<h5 class='text-right'>" . $record["author"] . "&nbsp&nbsp<small>" . $record["time"] ."</small></h5> ";
-				echo "</div>";
-				// echo "<div class='col-md-offset-2'>";
-
-
+		<?php 
+			if($replyList!=null){
+				foreach ($replyList as $reply) { 
+					echo "<div class='comment col-md-offset-2 col-md-9'>";
+					echo "	<hr />";
+					echo "	<p>";
+					echo $reply->replycontent;
+					echo "	</p>";
+					echo "	<h5 class='text-right'>" . $authorName[$reply->userid] . "&nbsp&nbsp<small>" . $reply->timestamp ."</small></h5> ";
+					echo "</div>";
+				}
 			}
 		?>
-
-
-
 	</div>
+
+
+	
 	<div id="reply" class="comment">
-		<!-- <form> -->
-			<label class="col-lg-2 control-label">Your name:</label>
-		    <div class="col-lg-10">
-		      	<input type="text" id="name" class="form-control">
-		    </div>
+			<!-- <label class="col-lg-2 control-label">Your name:</label> -->
+		    <!-- <div class="col-lg-10"> -->
+		      	<!-- <input type="text" id="name" class="form-control"> -->
+		    <!-- </div> -->
 			<label class="col-lg-2 control-label">Comment:</label>
 		    <div class="col-lg-10">
 		      	<textarea class="form-control" id="comment" rows="2"></textarea>
 		    </div>
-		    <?php echo "<input type='hidden' id='issue_id' value= '". $issue["issue_id"] ."''>" ?>
-			<!-- <input type="text" class="col-lg-2 control-label" id="inputbox">
-			<input type="button" id="submit" value="submit"> -->
+			<?php echo "<input type='hidden' id='name' value= '". $_SESSION["user"]->username ."''>" ?>
+		    
+		    <?php echo "<input type='hidden' id='issue_id' value= '". $issue->issueid ."''>" ?>
 			<div class="form-group">
 			    <div class="col-lg-offset-2 col-lg-11">
 			      	<button id="submitBtn" class="btn btn-default">Submit</button>
 			    </div>
 			</div>
-		<!-- </form> -->
 	</div>
+	
 <?php include("_footer.php"); ?> 
