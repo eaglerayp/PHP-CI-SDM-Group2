@@ -64,7 +64,7 @@
 		<div id="issue" class="col-md-offset-1  col-lg-10">
 			<p>
 				<?php
-					echo $issue->content;
+					echo nl2br(htmlspecialchars($issue->content));
 					// echo str_replace("\n", '<\ br>', $issue->content);
 				?>
 			</p>
@@ -77,7 +77,7 @@
 					echo "<div class='comment col-md-offset-2 col-md-9'>";
 					echo "	<hr />";
 					echo "	<p>";
-					echo $reply->replycontent;
+					echo nl2br(htmlspecialchars($reply->replycontent));
 					echo "	</p>";
 					echo "	<h5 class='text-right'>" . $authorName[$reply->userid] . "&nbsp&nbsp<small>" . $reply->timestamp ."</small></h5> ";
 					echo "</div>";
