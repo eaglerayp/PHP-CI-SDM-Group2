@@ -67,9 +67,22 @@
 			<input type="text" name="phone" value="<?=htmlspecialchars($userfile->phone)?>">
 			<input type="checkbox" name="phoneshow" value="1" <?php if ($userfile->phoneshow==1){?>checked <?php } ?> >
 			</div>
+<!-- TAG NEW WORK 
+input parameter $tag as php array  object $tag->tag ,followid
+-->
+			<div class="controls">
 
-			
-			
+			Tag : 
+			<input type="text" name="tag" >
+			<?php if($tags!=null){
+
+				foreach ($tags as $tag) { ?>
+				<span style='font-size:26px'><?=htmlspecialchars($tag->tag)?></span>
+				<button id="<?=$tag->followid?>" class="btn btn-default" >Delete</button>
+				<?php }
+				} ?> 
+			</div>
+
 			<div class="controls">	
 			<input type="hidden" name="currentstate" value="<?=$currentwork->state?>" />  
 			Current Postion
