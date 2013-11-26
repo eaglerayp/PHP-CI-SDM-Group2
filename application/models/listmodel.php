@@ -33,6 +33,20 @@
 				return 0;
 			}
 		}
+
+        public function getUsersFromName(){
+            $this->db->select("*");
+            $this->db->from("user");
+            //$this->db->join("userstudentid", "user.userid = userstudentid.userid");
+            $query = $this->db->get();
+            
+            if ($query->num_rows() > 0){    // If data exists
+                return $query->result();  // return the number of rows
+            }
+            else{
+                return 0;
+            }
+        }
 		
 		
     }

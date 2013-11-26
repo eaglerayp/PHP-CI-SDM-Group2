@@ -32,6 +32,10 @@
 	h1 {
 		font-size: 40px;
 	}
+	img {
+		width: 400px;
+		height: 300px;
+	}
 </style>
 	<div class="container">
 		<!-- <legend>Edit User Profile</legend> -->

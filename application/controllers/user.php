@@ -233,6 +233,73 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         		));
         	}
         }
+        // 處理Search ajax的funtcion （from table.php）
+        public function search(){
+            //接參數 用來搜尋user 的name or id
+            $queryTerm = trim($this->input->post("queryTerm"));
+            $resultArray =  array('');
+            //引入要用的model
+            $this->load->model('listmodel');
+            $this->load->model('usermodel');
+            //先撈出所有的user list 準備做name的比對
+            $dataArray = $this->listmodel->getUsersFromName();
+            //echo html的格式 是為了 回傳結果給前台直接改變頁面用的
+            echo "<thead>";
+            echo "<tr>";
+            echo "<td>Name</td>" ; 
+            echo "<td>StudentID</td>";
+            echo "</tr>";
+            echo "</thead>";
+            echo "<tbody>";
+            foreach ($dataArray as $key => $value) {
+                $tempText = "";
+                $studentidArray = $this->usermodel->getUserstudentid($value->userid);
+                foreach ($studentidArray as $key2 => $studentid)
+                    {
+                        if( $key2 > 0  ){
+                            $tempText = $tempText . ",";
+                        }
+                        $tempText = $tempText . $studentid->studentid;
+
+                       // echo print_r($studentid);
+                    }
+                $tempArray = array("username"=>$value->username,"userid"=>$value->userid,"studentid"=>$tempText);
+                array_push($resultArray, $tempArray); 
+            }
+
+
+
+            //開始比對資料的foreach迴圈
+            foreach ($resultArray as $key => $value) {
+                //判斷從資料庫拿出來的資料 是不是跟query相同
+                //echo print_r($value);
+                if( (strchr($value["username"],$queryTerm)!=false )|| (strchr($value["studentid"],$queryTerm)!=false)){
+                    //相同的時候開始做的事情 同樣的echo html的地方是為了前台座的處理
+                    // $studentidArray = $this->usermodel->getUserstudentid($value->userid);
+                    $text = "<tr class='tr_hover' em ='".$value["userid"]."'>";
+                    echo $text ;
+                    echo "<td>";
+                    echo $value["username"];
+                    echo "</td>";
+                    echo "<td>";
+                    echo $value["studentid"];
+                    //這邊是為了當名字一樣的時候撈出他的student id
+                    // foreach ($studentidArray as $key2 => $studentid)
+                    // {
+                        // if( $key2 > 0  ){
+                            // echo ",";
+                        // }
+                        // echo $studentid->studentid;
+
+                       // echo print_r($studentid);
+                    // }
+                    echo "</td>";
+                    echo "</tr>";
+                }
+
+            }
+           echo "</tbody>";
+        }
 
     }  
 ?>
