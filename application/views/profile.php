@@ -119,8 +119,8 @@
                 <?php foreach ($issues as $article) {   ?>  
                 <tr>  
                     <td>  
-                        <a href="<?=site_url("issue/view/".$article->IssueID)?>">  
-                            <?=htmlspecialchars($article->Title)?>  
+                        <a href="<?=site_url("issue/view/".$article->issueid)?>">  
+                            <?=htmlspecialchars($article->title)?>  
                         </a>  
                     </td>   
                     <td>  

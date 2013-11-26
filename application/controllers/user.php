@@ -94,10 +94,15 @@
             $userwork = $this->UserModel->getUserwork($account); 
             $userstudentid = $this->UserModel->getUserstudentid($account); 
 
+            $this->load->model("IssueModel");
+            $tags = $this->IssueModel->getUserTag($_SESSION["user"]->userid);
+
+
             $this->load->view('useredit',Array(  
             "pageTitle" => "Edit profile",
             "userwork" => $userwork,
             "userstudentid" => $userstudentid,
+            "tags" => $tags,
             "userfile" => $userfile
             ));  
         }
@@ -182,9 +187,11 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             $userwork = $this->UserModel->getUserwork($userid); 
             $userstudentid = $this->UserModel->getUserstudentid($userid); 
 
-            //取得此使用者的發文紀錄
+            //取得此使用者的發文紀錄 
             $this->load->model("IssueModel");
             $userpost = $this->IssueModel->getUserIssues($userid);
+
+
 
             $this->load->view('profile',Array(  
             "pageTitle" => "Userifle",
@@ -196,7 +203,14 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             "error" => $error
             ));   //轉回file頁面
         }//end logining
+    public function addTag($key){
+        $this->load->model("UserModel");
+        $tagid= $this->UserModel->addfollow($_SESSION["user"]->userid ,$key);
 
+    }
+    public function deleteTag($tag){
+
+    }
 
 	public function profile(){
         	if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁
@@ -229,6 +243,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         				"userstudentid" => $userstudentid,
         				"userfile" => $userfile,
         				"account" => $account,
+                        "tags" => $taglog,
                         "issues" => $userpost
         		));
         	}

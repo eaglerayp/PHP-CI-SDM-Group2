@@ -112,4 +112,67 @@
             $this->db->where('state', $currentstate);
             $this->db->update('userwork', $data);
         }
+
+        function addfollow($userid,$key){
+            $this->db->select("*");
+            $this->db->from("key");
+            $this->db->where("tag",$key);
+            $query=$this->db->get(); 
+            
+            if($query->num_rows() <= 0){            
+                $this->db->insert("key", 
+                    Array(
+                    "tag" => $key
+                )); 
+                $tagid=$this->db->insert_id();
+                $this->db->insert("follow", 
+                Array(
+                "userid" => $userid,
+                "followid" => $tagid
+                )); 
+            } else{
+                $data = array(
+                'frequency' => $query->row()->frequency + 1
+                );
+            
+                $this->db->where("tagid",$query->row()->tagid);
+                $this->db->update("key",$data);
+                $tagid=$query->row()->tagid;
+                $this->db->insert("follow", 
+                Array(
+                "userid" => $userid,
+                "followid" => $tagid
+                )); 
+            }
+            return $tagid;
+        }
+        function deletefollow($userid,$followid){
+            $this->db->select("key.*");  
+            $this->db->from('follow');  
+            $this->db->join('key', 'follow.followid = key.tagid');  
+            $this->db->where("followid",$followid);  
+            $queries = $this->db->get();
+            
+            foreach ($queries->result() as $query ) {
+                $frequency=$query->frequency - 1;
+            
+                if($frequency <= 0){
+                    $this->db->where('tagid', $query->tagid);
+                    $this->db->delete('key');
+                } else{
+                    $data = Array(
+                    "frequency" => $frequency,
+                    );
+                    
+                    $this->db->where("tagid", $query->tagid);
+                    $this->db->update("key", $data);
+                }
+            }
+           
+            
+            $this->db->where('userid', $userid);
+            $this->db->where('followid', $followid);
+            $this->db->delete('follow');
+
+        }
     }  
