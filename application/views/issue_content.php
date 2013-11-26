@@ -39,6 +39,7 @@
 		padding-left: 5%;
 		padding-right: 5%;
 		padding-bottom: 10%;
+		margin-top: 20px;
 	}
 	#reply{
 		position: fixed;
@@ -52,7 +53,11 @@
 		position:relative;
 		left: 5%;
 	}
+    #comment_textarea {
+    	position: relative;
+    	left: -50px;
 
+    }
 </style>
 
 	<div id="mainframe">
@@ -105,7 +110,7 @@
 		      	<!-- <input type="text" id="name" class="form-control"> -->
 		    <!-- </div> -->
 			<label class="col-lg-2 control-label">Comment:</label>
-		    <div class="col-lg-10">
+		    <div class="col-lg-10" id='comment_textarea'>
 		      	<textarea class="form-control" id="comment" rows="2"></textarea>
 		    </div>
 			<?php echo "<input type='hidden' id='name' value= '". $_SESSION["user"]->username ."''>" ?>

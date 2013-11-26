@@ -10,6 +10,7 @@
             
             <h1>AlumniBook</h1>  
             <h3>a Web-based system to interaction for "IM" People </h3>
+            <img src="<?=base_url("/img/homepage.jpeg")?>" />
         </div>  
     
 
