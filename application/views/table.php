@@ -13,31 +13,34 @@
     
     $(document).ready(function() {
         nav_click("nav_viewlist");
-
+        //Search Bar 按下enter後會執行的事情
         $("#searchBar").keypress(function(event) {
+               //13代表enter
               if (event.which == 13) {
               event.preventDefault();
               queryTerm = $("#searchBar").val()+"";
               console.log(queryTerm);
+              //這邊是ajax console.log是測試用
               $.ajax({
                   url: "<?=site_url("user/search")?>",
                   type: 'POST',
                   data: {queryTerm: queryTerm},
               })
               .done(function(data) {
-                  console.log("success");
-                  console.log(data);
+                  //console.log("success");
+                  //console.log(data);
                   $(".table").html(data);
 
               })
               .fail(function() {
-                  console.log("error");
+                  //console.log("error");
               })
 
               
         }
         });
-        $("body").on('click',".tr_hover",function(){
+        //讓table綁定動態事件click(為了link)
+        $(".table").on('click',".tr_hover",function(){
             var id = $(this).attr("em");
             var text = "<?=site_url("user/profile?userID=")?>" + id;
             location.href = text ;

@@ -163,6 +163,34 @@
 				$this->MailAdapter($emailmessage,$notify->email,$subject);
 	    	}
 	    }
+	    public function search(){
+	    	/* Check whether the user login or not*/
+			if (!isset($_SESSION["user"])){
+				redirect(site_url("/user/login"));	// Redirect to the login page
+				return true;
+			}  //end if
+
+	    	$queryTerm = $this->input->post("queryTerm");
+	    	$this->load->model("issuemodel");
+			$issues=$this->issuemodel->getAllIssues();
+			$resultArray = array();
+
+            foreach ($issues as $key => $value) {
+
+                if( (strchr($value->title,$queryTerm)!=false) ){
+
+                	array_push($resultArray, $value);
+                }
+            }
+			$this->load->view('issuesearch',
+			Array(
+			"pageTitle" => "Search Issues List",
+			"issues" => $resultArray
+			));
+
+	    }
+
+
 
 	    private function postingevent($issueid,$author){
 	    	$this->load->model("IssueModel");
@@ -181,4 +209,6 @@
 	    	}
 
 	    }
+
     } 
+?>
