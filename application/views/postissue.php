@@ -18,7 +18,7 @@
 				</tr>
 				<tr>
 					<td>Tag</td>
-					<td><input type="text" name="tag" /></td>
+					<td><input type="text" name="tag" />請在Tag前加上# 可支援多tag e.g.,#HASH #TAG  </td> 
 				</tr>
 				<tr>
 					<td> Content </td>

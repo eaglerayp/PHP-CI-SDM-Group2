@@ -35,10 +35,19 @@
 				));
 				return false;
 			}
-	 
+
 			$this->load->model("issuemodel");
 			$issueID = $this->issuemodel->insert($_SESSION["user"]->userid,$title,$content);  //完成新增動作
-			$tagid=$this->issuemodel->addtag($issueID,$tag);
+			//tag processing
+			$instring="#abc #gg #10";
+			$tag= preg_replace('/( *)/', '', $tag);
+			$stringarray=explode ("#",$tag);
+			foreach($stringarray as $split){
+				if($split != ""){
+					$tagid=$this->issuemodel->addtag($issueID,$split);
+				}
+			}
+
 			$this->issuemodel->follow($_SESSION["user"]->userid,$tagid);
 			$this->postingevent($issueID,$_SESSION["user"]->userid);
 			redirect(site_url("issue/view/".$issueID));
@@ -63,7 +72,7 @@
 	    	$replyList = $this->IssueModel->getReplyList($issueID);
 	    	$author = $this->IssueModel->getIssueAuthor($issueContent->authorid);
 	    	$tagArray = $this->IssueModel->getTagArray($issueID);
-
+	    	$this->IssueModel->updateViews($issueID);
 	    	$authorName = array();
 	    	foreach ($replyList as $reply) { 
 	    		$authorName[$reply->userid] = $this->IssueModel->getIssueAuthor($reply->userid);
@@ -198,14 +207,16 @@
 	    	$followerlist=$this->IssueModel->getFollowerList($issueid);
 	    	$subject = 'SDM Following Posting Notification';
 	    	$url=site_url("issue/view/".$issueid);
-
+	    	//print_r($followerlist);
 	    	foreach ($followerlist as $notify) { 
 				//save postingevent
-	    		$notifyid = $notify->userid;
-	    		$this->IssueModel->insertPostingevent($issueid,$notifyid);
-	    		$emailmessage='Hi,'.$notify->username.'.'. $author.'just posted a issue which you would like, {unwrap}<a href='.$url.'> '.$title.' </a>{/unwrap}';
-	    		//call mail function
-				$this->MailAdapter($emailmessage,$notify->email,$subject);
+				if($notify->userid!=""){
+		    		$notifyid = $notify->userid;
+		    		$this->IssueModel->insertPostingevent($issueid,$notifyid);
+		    		$emailmessage='Hi,'.$notify->username.'.'. $author.'just posted a issue which you would like, {unwrap}<a href='.$url.'> '.$title.' </a>{/unwrap}';
+		    		//call mail function
+					$this->MailAdapter($emailmessage,$notify->email,$subject);
+				}
 	    	}
 
 	    }
