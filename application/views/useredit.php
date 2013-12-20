@@ -81,8 +81,8 @@ input parameter $tag as php array  object $tag->tag ,followid
 			<?php if($tags!=null){
 
 				foreach ($tags as $tag) { ?>
-				<span style='font-size:26px'><?=htmlspecialchars($tag->tag)?></span>
-				<button id="<?=$tag->followid?>" class="btn btn-default" >Delete</button>
+				<span id="<?=$tag->followid?>" style='font-size:26px'><?=htmlspecialchars($tag->tag)?></span>
+				<a id="<?=$tag->followid?>" href="<?=site_url("user/deleteTag/".$tag->followid)?>">Delete</a>
 				<?php }
 				} ?> 
 			</div>
