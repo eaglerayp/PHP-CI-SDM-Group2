@@ -68,7 +68,7 @@
 				echo "<h3><small> ";
 				if($tagArray!=null){
 					foreach($tagArray as $tag){
-						echo '<span class="label label-default">'.htmlspecialchars($tag).'</span>';
+						echo '<span class="label label-default">'.htmlspecialchars($tag).'</span> ';
 					}
 				}
 				echo "</small></h3>";

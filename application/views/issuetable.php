@@ -8,6 +8,10 @@
         background-color: #F5F5DC;
         cursor: pointer;
     }
+/*    .container {
+        position: absolute;
+        width: 90%;
+    }*/
 </style>
 <script type="text/javascript">
     function linktoissue(id){

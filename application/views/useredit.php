@@ -125,22 +125,24 @@
 <!-- TAG NEW WORK 
 input parameter $tag as php array  object $tag->tag ,followid
 -->
-			
+
 				<tr>
 					<td>
 						<label class="control-label" for="controlTags">Tag</label>
 					</td>
 					<td>
 						<input type="text" name="tag" >
+						<div class="tagDiv">
 						<?php if($tags!=null){
-						echo "<div id='tagDiv'>";
-						foreach ($tags as $tag) { ?>
-							<span class="label label-default"><?=htmlspecialchars($tag->tag)?></span>
-							<!-- <span style='font-size:26px'><?=htmlspecialchars($tag->tag)?></span> -->
-							<button id="<?=$tag->followid?>" class="btn btn-default" >Delete</button>
-						<?php }
-						echo "</div>";
-					} ?> 
+
+							foreach ($tags as $tag) { ?>
+							<span id="<?=$tag->followid?>" style='font-size:26px'><?=htmlspecialchars($tag->tag)?></span>
+							<a id="<?=$tag->followid?>" href="<?=site_url("user/deleteTag/".$tag->followid)?>">Delete</a>
+							<?php }
+							} ?> 
+						</div>
+
+
 					</td>
 				</tr>
 				<input type="hidden" name="currentstate" value="<?=$currentwork->state?>" /> 

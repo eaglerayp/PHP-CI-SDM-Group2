@@ -144,6 +144,7 @@ and  "email","phone","address","phoneshow","addressshow","autobiography","userca
             $currentstate= trim($this->input->post("currentstate"));  
             $currentoldposition= trim($this->input->post("currentoldposition"));  
             $currentoldemployer= trim($this->input->post("currentoldemployer")); 
+            $addtag = trim($this->input->post("tag")); 
 
 
             //implement img upload
@@ -169,6 +170,10 @@ and  "email","phone","address","phoneshow","addressshow","autobiography","userca
 reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.html
 */
             $this->load->model("UserModel");
+            //implement addtag
+            if($addtag!=""){
+                $tagid= $this->UserModel->addfollow($userid ,$addtag);
+            }
             //完成取資料動作
             $this->UserModel->updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath,$positionshow,$employershow); 
             if($addwork==1 && $position!=""){
@@ -190,6 +195,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             //取得此使用者的發文紀錄 
             $this->load->model("IssueModel");
             $userpost = $this->IssueModel->getUserIssues($userid);
+            $tags = $this->IssueModel->getUserTag($userid);
 
 
 
@@ -200,16 +206,39 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             "userfile" => $userfile,
             "account" => $userid,
             "issues" => $userpost,
-            "error" => $error
+            "error" => $error,
+            "tags" => $tags,
+            "profileID" => $userid
             ));   //轉回file頁面
         }//end logining
-    public function addTag($key){
+    /*public function addTag($key){
         $this->load->model("UserModel");
         $tagid= $this->UserModel->addfollow($_SESSION["user"]->userid ,$key);
 
-    }
-    public function deleteTag($tag){
+    }*/
+    public function deleteTag($followid){
+        $this->load->model("UserModel");
+        $this->UserModel->deletefollow($_SESSION["user"]->userid ,$followid);
 
+        $account = $_SESSION["user"]->userid;
+
+        $this->load->model("UserModel");
+        //完成取資料動作
+        $userfile = $this->UserModel->getUserfile($account); 
+        $userwork = $this->UserModel->getUserwork($account); 
+        $userstudentid = $this->UserModel->getUserstudentid($account); 
+
+        $this->load->model("IssueModel");
+        $tags = $this->IssueModel->getUserTag($_SESSION["user"]->userid);
+
+
+        $this->load->view('useredit',Array(  
+        "pageTitle" => "Edit profile",
+        "userwork" => $userwork,
+        "userstudentid" => $userstudentid,
+        "tags" => $tags,
+        "userfile" => $userfile
+        ));  
     }
 
 	public function profile(){
@@ -240,8 +269,6 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             //取得此使用者的發文紀錄
             $this->load->model("IssueModel");
             $userpost = $this->IssueModel->getUserIssues($id);
-
-            $this->load->model("IssueModel");
             $tags = $this->IssueModel->getUserTag($id);
 
     		$this->load->view('profile',Array(

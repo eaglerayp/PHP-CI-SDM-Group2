@@ -140,14 +140,10 @@
             $this->db->delete('issue');
 		}
 		
-        function updateViews($issueID,$views){
-        	$views = $views+1;
-            $data = array(
-                'views' => $views,
-            );
-
+        function updateViews($issueID){
+            $this->db->set('views', 'views+1', FALSE);
             $this->db->where('issueid', $issueID);
-            $this->db->update('issue', $data);
+            $this->db->update('issue');
         }
 
         function getIssueContent($issueID){
