@@ -195,6 +195,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             //取得此使用者的發文紀錄 
             $this->load->model("IssueModel");
             $userpost = $this->IssueModel->getUserIssues($userid);
+            $tags = $this->IssueModel->getUserTag($userid);
 
 
 
@@ -205,7 +206,9 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             "userfile" => $userfile,
             "account" => $userid,
             "issues" => $userpost,
-            "error" => $error
+            "error" => $error,
+            "tags" => $tags,
+            "profileID" => $userid
             ));   //轉回file頁面
         }//end logining
     /*public function addTag($key){
@@ -294,6 +297,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         	//id should load from total view
         	$id = trim($this->input->get("userID"));
         	
+
         	if ( $id == $account ){
         		$this->edit();
         	}//check whether this user is the user himself or not
@@ -321,7 +325,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         	}
     }
     // 處理Search ajax的funtcion （from table.php）
-    public function search(){
+    /*public function search(){
         //接參數 用來搜尋user 的name or id
         $queryTerm = trim($this->input->post("queryTerm"));
         $resultArray =  array('');
@@ -345,6 +349,66 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
                 {
                     if( $key2 > 0  ){
                         $tempText = $tempText . ",";
+        	// if ( $id == $account ){
+        	// 	// $this->edit();
+         //        $editable = true;
+        	// }//check whether this user is the user himself or not
+        	// else {
+         //        $editable = false;
+         //    }
+
+    		$this->load->model("UserModel");
+    		//完成取資料動作
+    		$userfile = $this->UserModel->getUserfile($id);
+    		$userwork = $this->UserModel->getUserwork($id);
+    		$userstudentid = $this->UserModel->getUserstudentid($id);
+    		 
+
+            //取得此使用者的發文紀錄
+            $this->load->model("IssueModel");
+            $userpost = $this->IssueModel->getUserIssues($id);
+            $tags = $this->IssueModel->getUserTag($id);
+
+    		$this->load->view('profile',Array(
+    				"userwork" => $userwork,
+    				"userstudentid" => $userstudentid,
+    				"userfile" => $userfile,
+    				"account" => $account,
+                    "tags" => $tags,
+                    "issues" => $userpost,
+                    "profileID" => $id
+    		));
+        	
+        }*/
+        // 處理Search ajax的funtcion （from table.php）
+        public function search(){
+            //接參數 用來搜尋user 的name or id
+            $queryTerm = trim($this->input->post("queryTerm"));
+            $resultArray =  array('');
+            //引入要用的model
+            $this->load->model('listmodel');
+            $this->load->model('usermodel');
+            //先撈出所有的user list 準備做name的比對
+            $dataArray = $this->listmodel->getUsersFromName();
+            //echo html的格式 是為了 回傳結果給前台直接改變頁面用的
+            echo "<thead>";
+            echo "<tr>";
+            echo "<td>Name</td>" ; 
+            echo "<td>StudentID</td>";
+            echo "</tr>";
+            echo "</thead>";
+            echo "<tbody>";
+            foreach ($dataArray as $key => $value) {
+                $tempText = "";
+                $studentidArray = $this->usermodel->getUserstudentid($value->userid);
+                foreach ($studentidArray as $key2 => $studentid)
+                    {
+                        if( $key2 > 0  ){
+                            $tempText = $tempText . ",";
+                        }
+                        $tempText = $tempText . $studentid->studentid;
+
+                       // echo print_r($studentid);
                     }
                     $tempText = $tempText . $studentid->studentid;
 
@@ -352,9 +416,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
                 }
             $tempArray = array("username"=>$value->username,"userid"=>$value->userid,"studentid"=>$tempText);
             array_push($resultArray, $tempArray); 
-        }
-
-
+        
 
         //開始比對資料的foreach迴圈
         foreach ($resultArray as $key => $value) {
@@ -385,8 +447,20 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             }
 
         }
+
        echo "</tbody>";
     }
+
+        public function myProfile() {
+            if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
+                redirect(site_url("/user/login")); //轉回登入頁  
+                return true;  
+            }  //end if
+            $account = $_SESSION["user"]->userid;
+            // redirect('/welcome/', 'location');
+            redirect(site_url("/user/profile?userID=".$account));
+        }
+
 
 }  
 ?>

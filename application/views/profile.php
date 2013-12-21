@@ -15,35 +15,52 @@
 <style type="text/css">
 	.user_image {
 		position: relative;
-		left: 50px;
-		top:50px;
+		/*left: 50px;*/
+		top: 5%;
 		margin: 10px;
 	}
 	.user_image > img {
 		width: 400px;
-		height: 300px;
+		height: 350px;
 	}
-	.table {
+	.profileList {
 		position: relative;
-		right: 100px;
-		top: 80px;
+		/*right: 100px;*/
+		/*top: 80px;*/
 		float: right;
 		width: 600px;
 	}
 	.user_autobiography {
 		position: relative;
-		left: 50px;
+		/*left: 50px;*/
 		top: 80px;
-		margin: 10px;
+		/*margin: 10px;*/
 		max-width: 1100px;
 	}
-</style>
+	#editBtn {
+		position: absolute;
+		right: 0px;
+		z-index: 1;
+		/*top: 5%;*/
+	}
+	#issueList {
+		position: absolute;
+		width: 450px;
+		top: 400px;
 
+	}
+</style>
 	<div class='user_profile'>
-		<table class='table'>
+		<?php 
+			if($account == $profileID){
+				echo '<button id="editBtn" type="button" onclick="location.href=\''.site_url("/user/edit").'\'" class="btn btn-success">Edit Profile</button>';
+			}
+		?>
+		<table class='table profileList'>
 			<tr>
 				<td>Username</td>
 				<td><?php echo $userfile->username;?></td>
+				
 			</tr>
 			<tr>
 				<td>Student ID</td>
@@ -75,13 +92,26 @@
 				<td><?php echo $userfile->autobiography;?></td>
 			</tr> -->
 			<tr>
-				<td>Usercategory</td>
+				<td>User Type</td>
 				<td><?php echo $userfile->usercategory;?></td>
 			</tr>
-			<?php /*<tr>
-				<td>Image</td>
-				<td><?php echo $image;?></td>
-			</tr>*/?>
+			<tr>
+				<td>Following Tags</td>
+				<td>
+					<?php if($tags!=null){
+					foreach ($tags as $tag) { ?>
+						<span class="label label-default"><?=htmlspecialchars($tag->tag)?></span>
+						<!-- <span style='font-size:26px'><?=htmlspecialchars($tag->tag)?></span> -->
+					<?php }
+					} 
+					else
+						echo "none"
+					?> 
+				</td>
+			</tr>	
+			
+
+			
 			<?php if ($userfile->positionshow == 1 ){ ?>
 			<tr>
 				<td>Current Postion</td>
@@ -94,6 +124,12 @@
 				<td><?php  echo $currentwork->employer;?></td>
 			</tr>
 			<?php }?>
+
+			<tr>
+				<td>Autobiography</td>
+				<td><?=nl2br(htmlspecialchars($userfile->autobiography))?></td>
+			</tr>
+
 		</table>
 	</div>
 	<div class='user_image'>
@@ -101,16 +137,16 @@
 
 		<img src="<?=base_url("/uploads/".$userfile->image)?>" alt="Personal photo">
 	</div>
-	<div class='user_autobiography'>
-		<p>Autobiography：</p>
+<!-- 	<div class='user_autobiography'>
+		<p>Autobiography</p>
 		<?=nl2br(htmlspecialchars($userfile->autobiography))?>
-	</div>
+	</div> -->
 	<div>
 				<!--NEW ADDING FOR USER ISSUES -->
 		<?php if(count($issues) == 0 ){ ?>  
                  
         <?php }else{ ?>  
-		<table class="table">   
+		<table class="table" id="issueList">   
                 <tr>  
                     <td>標題</td>   
                     <td>點閱次數</td>

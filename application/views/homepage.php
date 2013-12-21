@@ -5,11 +5,16 @@
         nav_click("nav_home");
     });
 </script>
+<style type="text/css">
+ img {
+    width:95%;
+ }
+</style>
     <div class="container home"> 
         <div>  
             
             <h1>AlumniBook</h1>  
-            <h3>a Web-based system to interaction for "IM" People </h3>
+            <h3>Hi, welcome to NTUIM family!</h3>
             <img src="<?=base_url("/img/homepage.jpeg")?>" />
         </div>  
     
