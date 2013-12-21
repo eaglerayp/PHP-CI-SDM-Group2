@@ -1,5 +1,13 @@
 <?php include("_header.php"); ?> 
 <?php include("_navbar.php"); ?>
+<style type="text/css">
+	input {
+		width:1000px;
+	}
+	textarea {
+		width: 1000px;
+	}
+</style>
 <div class="container">
 	<div class="content">
 		<form action="<?=site_url("issue/posting")?>" method="post" > 
