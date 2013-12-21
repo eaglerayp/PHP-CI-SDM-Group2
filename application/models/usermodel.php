@@ -1,4 +1,4 @@
-    <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');  
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');  
     class UserModel extends CI_Model {  
         function __construct()  
         {  
@@ -19,9 +19,9 @@
       
         	return $query->row()->users > 0 ;  
     	}  
-        public function getUser($account,$password){  
+        public function getUser($account){  
             $this->db->select("userid,username");  
-            $query = $this->db->get_where("user",Array("userid" => $account, "password" => $password ));  
+            $query = $this->db->get_where("user",Array("userid" => $account));  
       
             if ($query->num_rows() > 0){ //如果數量大於0  
                 return $query->row();  //回傳第一筆  

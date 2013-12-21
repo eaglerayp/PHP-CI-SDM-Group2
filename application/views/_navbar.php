@@ -62,13 +62,13 @@
                }
                if(isset($_SESSION["user"]) && $_SESSION["user"] != null){ ?>  
               <ul class="nav pull-right">  
-              <li><a id="UserID" href="#">HI,<?=$_SESSION["user"]->username?></a></li>   
+              <li><a id="UserID" href="#">HI <?=$_SESSION["user"]->username?></a></li>   
               <li class="divider-vertical"></li>  
               <li><a href="<?=site_url("user/logout")?>">Log out</a></li> 
               </ul>  
               <?php }else{ ?>   
               <ul class="nav pull-right">  
-              <li><a href="<?=site_url("user/login")?>">Sign in</a></li>  
+              <li><a href="<?=site_url("user/singlesignon")?>">Sign in</a></li>  
               <li class="divider-vertical"></li>  
               <li><a href="<?=site_url("user/register")?>">Sign up</a></li>  
               </ul>          
