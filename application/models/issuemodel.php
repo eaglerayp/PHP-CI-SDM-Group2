@@ -177,7 +177,7 @@
             $this->db->select("reply.userid,user.username,user.email");
             $this->db->from('reply');
             $this->db->join('user','user.userid=reply.userid','left'); //left join user table get name and email
-            $this->db->where(Array("issueid" => $issueID));
+            $this->db->where("issueid",$issueID);
             $query = $this->db->get();
 
             return $query->result();

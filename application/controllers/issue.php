@@ -39,7 +39,6 @@
 			$this->load->model("issuemodel");
 			$issueID = $this->issuemodel->insert($_SESSION["user"]->userid,$title,$content);  //完成新增動作
 			//tag processing
-			$instring="#abc #gg #10";
 			$tag= preg_replace('/( *)/', '', $tag);
 			$stringarray=explode ("#",$tag);
 			foreach($stringarray as $split){
