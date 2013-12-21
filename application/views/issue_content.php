@@ -67,10 +67,8 @@
 				echo "<h3><small> " . $issue->timestamp ."</small></h3>";
 				echo "<h3><small> ";
 				if($tagArray!=null){
-					echo "tag: ";
 					foreach($tagArray as $tag){
-						echo $tag;
-						echo " ";
+						echo '<span class="label label-default">'.htmlspecialchars($tag).'</span>';
 					}
 				}
 				echo "</small></h3>";

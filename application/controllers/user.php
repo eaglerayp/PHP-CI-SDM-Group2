@@ -222,31 +222,38 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         	//id should load from total view
         	$id = trim($this->input->get("userID"));
         	
-        	if ( $id == $account ){
-        		$this->edit();
-        	}//check whether this user is the user himself or not
-        	else {
+        	// if ( $id == $account ){
+        	// 	// $this->edit();
+         //        $editable = true;
+        	// }//check whether this user is the user himself or not
+        	// else {
+         //        $editable = false;
+         //    }
 
-        		$this->load->model("UserModel");
-        		//完成取資料動作
-        		$userfile = $this->UserModel->getUserfile($id);
-        		$userwork = $this->UserModel->getUserwork($id);
-        		$userstudentid = $this->UserModel->getUserstudentid($id);
-        		 
+    		$this->load->model("UserModel");
+    		//完成取資料動作
+    		$userfile = $this->UserModel->getUserfile($id);
+    		$userwork = $this->UserModel->getUserwork($id);
+    		$userstudentid = $this->UserModel->getUserstudentid($id);
+    		 
 
-                //取得此使用者的發文紀錄
-                $this->load->model("IssueModel");
-                $userpost = $this->IssueModel->getUserIssues($id);
+            //取得此使用者的發文紀錄
+            $this->load->model("IssueModel");
+            $userpost = $this->IssueModel->getUserIssues($id);
 
-        		$this->load->view('profile',Array(
-        				"userwork" => $userwork,
-        				"userstudentid" => $userstudentid,
-        				"userfile" => $userfile,
-        				"account" => $account,
-                        "tags" => $taglog,
-                        "issues" => $userpost
-        		));
-        	}
+            $this->load->model("IssueModel");
+            $tags = $this->IssueModel->getUserTag($id);
+
+    		$this->load->view('profile',Array(
+    				"userwork" => $userwork,
+    				"userstudentid" => $userstudentid,
+    				"userfile" => $userfile,
+    				"account" => $account,
+                    "tags" => $tags,
+                    "issues" => $userpost,
+                    "profileID" => $id
+    		));
+        	
         }
         // 處理Search ajax的funtcion （from table.php）
         public function search(){
@@ -314,6 +321,15 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
 
             }
            echo "</tbody>";
+        }
+        public function myProfile() {
+            if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
+                redirect(site_url("/user/login")); //轉回登入頁  
+                return true;  
+            }  //end if
+            $account = $_SESSION["user"]->userid;
+            // redirect('/welcome/', 'location');
+            redirect(site_url("/user/profile?userID=".$account));
         }
 
     }  

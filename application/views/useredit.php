@@ -30,16 +30,41 @@
 		max-width: 200px;
 	}
 	h1 {
+		position: relative;
+		left: 3%;
 		font-size: 40px;
 	}
 	img {
 		width: 400px;
 		height: 300px;
+		
+	}
+/*	.img {
+		position: absolute;
+		right: 0%;
+		text-align : center;
+	}*/
+	#tagDiv {
+		max-height: 200px;
+		overflow: auto;
+		/*width:200px;*/
+	}
+	.control-label {
+		.h1;
+	}
+/*	.controls input {
+		position: relative;
+		left: 5%;
+	}*/
+	.table {
+		position: relative;
+		left: 3%;
+		width: 90%;
 	}
 </style>
 	<div class="container">
 		<!-- <legend>Edit User Profile</legend> -->
-		<h1><?=htmlspecialchars($userfile->username)?> file</h1>
+		<h1><?=htmlspecialchars($userfile->username)?>'s Profile</h1>
 
 
 		<?php if(isset($error)){echo $error;}?>
@@ -48,94 +73,166 @@
 		<?php echo form_open_multipart("user/editing");?>
 
 		<input type="hidden" name="fileuserid" value="<?=$userfile->userid?>" />  
-		<label class="control-label" for="inputphone">Photo</label>
-		<img src="<?=base_url("/uploads/".$userfile->image)?>" alt="Personal photo">
-		<input type="hidden" name="imgpath" value="<?=$userfile->image?>" /> 
-		<input type="file" name="userfile" size="20" />
+		<!-- <label class="control-label" for="inputphone">Photo</label> -->
+		
 
+			<table class="table">
+				<tr>
+					<td>
+						<label class="control-label" for="inputImage">Image</label>
+					</td>
+					<td>
+						<div class="img">
+								<img src="<?=base_url("/uploads/".$userfile->image)?>" alt="Personal photo">
+								<input type="hidden" name="imgpath" value="<?=$userfile->image?>" /> 
+								<input type="file" name="userfile" size="20" />
+						</div>
+					</td>
+				<tr>
+			<!-- <div class="control-group"> -->
+					<td>
+						<label class="control-label" for="inputEmail">Email</label>
+					</td>
+					<td>
+			<!-- <div class="controls"> -->
+						<input type="text" name="Email" value="<?=htmlspecialchars($userfile->email)?>">
+					</td>
+			<!-- </div> -->
+				</tr>
+				<tr>
+					<td>
+						<label class="control-label" for="inputaddress">Postal Address</label>
+					</td>
+			<!-- <div class="controls"> -->
+					<td>
+						<input type="text" name="address" value="<?=htmlspecialchars($userfile->address)?>">
+						<input type="checkbox" name="addressshow" value="1" <?php if ($userfile->addressshow==1){?>checked <?php } ?> >
+					</td>
+				</tr>
+			<!-- </div> -->
 
-			<div class="control-group">
-			<label class="control-label" for="inputEmail">Email</label>
-			<div class="controls">
-			<input type="text" name="Email" value="<?=htmlspecialchars($userfile->email)?>">
-			</div>
-			<label class="control-label" for="inputaddress">Postal Address</label>
-			<div class="controls">
-			<input type="text" name="address" value="<?=htmlspecialchars($userfile->address)?>">
-			<input type="checkbox" name="addressshow" value="1" <?php if ($userfile->addressshow==1){?>checked <?php } ?> >
-			</div>
-
-			
-			<label class="control-label" for="inputphone">Phone</label>
-			<div class="controls">
-			<input type="text" name="phone" value="<?=htmlspecialchars($userfile->phone)?>">
-			<input type="checkbox" name="phoneshow" value="1" <?php if ($userfile->phoneshow==1){?>checked <?php } ?> >
-			</div>
+				<tr>
+					<td>
+						<label class="control-label" for="inputphone">Phone</label>
+			<!-- <div class="controls"> -->
+					</td>
+					<td>
+						<input type="text" name="phone" value="<?=htmlspecialchars($userfile->phone)?>">
+						<input type="checkbox" name="phoneshow" value="1" <?php if ($userfile->phoneshow==1){?>checked <?php } ?> >
+					</td>
+				</tr>
+			<!-- </div> -->
 <!-- TAG NEW WORK 
 input parameter $tag as php array  object $tag->tag ,followid
 -->
-			<div class="controls">
+			
+				<tr>
+					<td>
+						<label class="control-label" for="controlTags">Tag</label>
+					</td>
+					<td>
+						<input type="text" name="tag" >
+						<?php if($tags!=null){
+						echo "<div id='tagDiv'>";
+						foreach ($tags as $tag) { ?>
+							<span class="label label-default"><?=htmlspecialchars($tag->tag)?></span>
+							<!-- <span style='font-size:26px'><?=htmlspecialchars($tag->tag)?></span> -->
+							<button id="<?=$tag->followid?>" class="btn btn-default" >Delete</button>
+						<?php }
+						echo "</div>";
+					} ?> 
+					</td>
+				</tr>
+				<input type="hidden" name="currentstate" value="<?=$currentwork->state?>" /> 
+				<tr>
+					<td>
+			<!-- </div> -->
+			
+			<!-- <div class="controls">	 -->
+						<label class="control-label" for="workexperience">Work Experience</label>
+						
 
-			Tag : 
-			<input type="text" name="tag" >
-			<?php if($tags!=null){
+						
+					</td>
+					<td>
+						<label class="control-label" for="currentPosition">Current Position</label>
+						<input type="text" name="currentposition" value="<?=htmlspecialchars($currentwork->position)?>">
+						<input type="checkbox" name="positionshow" value="1" <?php if($userfile->positionshow==1){ ?>checked <?php } ?> >
+			<!-- 		</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="control-label" for="currentEmployee">Current employer</label>
+						
+					</td>
+					<td> -->
+						<label class="control-label" for="currentEmployee">Current Employer</label>
+						<input type="text" name="currentemployer" value="<?=htmlspecialchars($currentwork->employer)?>">
+						<input type="checkbox" name="employershow" value="1" <?php if($userfile->employershow==1){ ?>checked <?php } ?> >
+						<div id='work_area'>
 
-				foreach ($tags as $tag) { ?>
-				<span style='font-size:26px'><?=htmlspecialchars($tag->tag)?></span>
-				<button id="<?=$tag->followid?>" class="btn btn-default" >Delete</button>
-				<?php }
-				} ?> 
-			</div>
-
-			<div class="controls">	
-			<input type="hidden" name="currentstate" value="<?=$currentwork->state?>" />  
-			Current Postion
-			<input type="text" name="currentposition" value="<?=htmlspecialchars($currentwork->position)?>">
-			<input type="checkbox" name="positionshow" value="1" <?php if($userfile->positionshow==1){ ?>checked <?php } ?> >
-			Current employer
-			<input type="text" name="currentemployer" value="<?=htmlspecialchars($currentwork->employer)?>">
-			<input type="checkbox" name="employershow" value="1" <?php if($userfile->employershow==1){ ?>checked <?php } ?> >
+						<?php 
+						if($userwork!=null){
+						foreach ($userwork as $newwork) { ?>
+						<div class="controls">
+						Past Postion : 
+						<span style='font-size:26px'><?=htmlspecialchars($newwork->position)?></span>
+						Past employer : 
+						<span style='font-size:26px'><?=htmlspecialchars($newwork->employer)?></span>
+						</div>
+						<?php }
+						} ?> 
+						</div>
+						<div id='add_work' ><a herf=''>add more work</a></div>	
+						<input type="hidden" name="addwork" value="0" />  
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label class="control-label" for="studentid">StudentID</label>
+					</td>
+					<td>
+						<div id='studentid_area'>
+						<?php 
+						if($userstudentid!=null){
+						foreach ($userstudentid as $id) { ?>
+						<div class="controls">
+						<input type="text" name="studentid" value="<?=htmlspecialchars($id->studentid)?>">
+						</div>
+						<?php }
+						} ?>
+						</div> 
+						<div id='add_studentid' ><a herf=''>add more student id</a></div>
+						<input type="hidden" name="addid" value="0" />  
+					</td>
+				</tr>
+			
+			<!-- </div> -->
+			
+			
+				<tr>
+			<!-- <div class="control-group"> -->
+					<td>
+						<label class="control-label" for="inputautobiography">Autobiography</label>
+					</td>
+					<td>
+			<!-- <div class="controls"> -->
+						<textarea class="input-block-level" name="autobiography" rows="10" >
+						<?=htmlspecialchars($userfile->autobiography)?>
+						</textarea>
+					</td>
+				</tr>
+			<!-- </div> -->
+				<tr>
+					<td />
+					<td>
+						<button id='send_edit_data' class="btn btn-info" type="submit">Edit Confirm</div>
+					</td>
+				</tr>
+			</table>
+			
 			</div>
 			
-			<div id='work_area'>
-
-				<?php 
-				if($userwork!=null){
-				foreach ($userwork as $newwork) { ?>
-				<div class="controls">
-				Past Postion : 
-				<span style='font-size:26px'><?=htmlspecialchars($newwork->position)?></span>
-				Past employer : 
-				<span style='font-size:26px'><?=htmlspecialchars($newwork->employer)?></span>
-				</div>
-				<?php }
-				} ?> 
-			</div>
-			<div id='add_work' ><a herf=''>add more work</a></div>	
-			<input type="hidden" name="addwork" value="0" />  
-			<label class="control-label" for="studentid">StudentID</label>
-			<div id='studentid_area'>
-				<?php 
-				if($userstudentid!=null){
-				foreach ($userstudentid as $id) { ?>
-				<div class="controls">
-				<input type="text" name="studentid" value="<?=htmlspecialchars($id->studentid)?>">
-				</div>
-				<?php }
-				} ?>
-			</div> 
-			<div id='add_studentid' ><a herf=''>add more student id</a></div>
-			<input type="hidden" name="addid" value="0" />  
-			<div class="control-group">
-			<label class="control-label" for="inputautobiography">Autobiography</label>
-			<div class="controls">
-			<textarea class="input-block-level" name="autobiography" rows="10" >
-				<?=htmlspecialchars($userfile->autobiography)?>
-			</textarea>
-			</div>
-
-			</div>
-			<button id='send_edit_data' class="btn btn-info" type="submit">Edit Confirm</div>
 		</form>
 		
 	</div>
