@@ -140,14 +140,10 @@
             $this->db->delete('issue');
 		}
 		
-        function updateViews($issueID,$views){
-        	$views = $views+1;
-            $data = array(
-                'views' => $views,
-            );
-
+        function updateViews($issueID){
+            $this->db->set('views', 'views+1', FALSE);
             $this->db->where('issueid', $issueID);
-            $this->db->update('issue', $data);
+            $this->db->update('issue');
         }
 
         function getIssueContent($issueID){
@@ -181,7 +177,7 @@
             $this->db->select("reply.userid,user.username,user.email");
             $this->db->from('reply');
             $this->db->join('user','user.userid=reply.userid','left'); //left join user table get name and email
-            $this->db->where(Array("issueid" => $issueID));
+            $this->db->where("issueid",$issueID);
             $query = $this->db->get();
 
             return $query->result();

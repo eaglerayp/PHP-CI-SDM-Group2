@@ -1,7 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');  
       
     class User extends MY_Controller {  
-        public function register()  {  
+
+
+		public function singlesignon(){
+			if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
+                $this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				)); 
+            }
+			
+		}
+		
+		
+        public function register(){  
             $this->load->view('register',Array(   
             "pageTitle" => "Sign up"
             )); 
@@ -50,26 +62,17 @@
             ));  
         }  //end login
 
-        public function logining(){
+        public function logining($account){
             if(isset($_SESSION["user"]) && $_SESSION["user"] != null){ //已經登入的話直接回首頁
                 redirect(site_url("/")); //轉回首頁
                 return true;
             }
  
-            $account = trim($this->input->post("UserID"));
-            $password = trim($this->input->post("password"));
- 
             $this->load->model("UserModel");
-            $user = $this->UserModel->getUser($account,$password);
+            $user = $this->UserModel->getUser($account);
  
             if($user == null){
-                $this->load->view(
-                "login",
-                Array( "pageTitle" => "Logining" ,
-                "UserID" => $account,
-                "errorMessage" => "ID or password wrong"
-                ));  
-                return true;
+                redirect(site_url("/"));
             }
 
             $_SESSION["user"] = $user;
@@ -83,8 +86,9 @@
 
         public function edit(){
             if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
-                redirect(site_url("/user/login")); //轉回登入頁  
-                return true;  
+                $this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				));  
             }  //end if
             $account = $_SESSION["user"]->userid;
 
@@ -109,8 +113,9 @@
 
         public function editing(){
             if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
-                redirect(site_url("/user/login")); //轉回登入頁  
-                return true;  
+                $this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				));   
             }  
             $userid = trim($this->input->post("fileuserid"));
             if ($userid != $_SESSION["user"]->userid ){  
@@ -144,6 +149,7 @@ and  "email","phone","address","phoneshow","addressshow","autobiography","userca
             $currentstate= trim($this->input->post("currentstate"));  
             $currentoldposition= trim($this->input->post("currentoldposition"));  
             $currentoldemployer= trim($this->input->post("currentoldemployer")); 
+            $addtag = trim($this->input->post("tag")); 
 
 
             //implement img upload
@@ -169,6 +175,10 @@ and  "email","phone","address","phoneshow","addressshow","autobiography","userca
 reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.html
 */
             $this->load->model("UserModel");
+            //implement addtag
+            if($addtag!=""){
+                $tagid= $this->UserModel->addfollow($userid ,$addtag);
+            }
             //完成取資料動作
             $this->UserModel->updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath,$positionshow,$employershow); 
             if($addwork==1 && $position!=""){
@@ -190,6 +200,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             //取得此使用者的發文紀錄 
             $this->load->model("IssueModel");
             $userpost = $this->IssueModel->getUserIssues($userid);
+            $tags = $this->IssueModel->getUserTag($userid);
 
 
 
@@ -200,28 +211,99 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             "userfile" => $userfile,
             "account" => $userid,
             "issues" => $userpost,
-            "error" => $error
+            "error" => $error,
+            "tags" => $tags,
+            "profileID" => $userid
             ));   //轉回file頁面
         }//end logining
-    public function addTag($key){
+    /*public function addTag($key){
         $this->load->model("UserModel");
         $tagid= $this->UserModel->addfollow($_SESSION["user"]->userid ,$key);
 
-    }
-    public function deleteTag($tag){
+    }*/
+    public function deleteTag($followid){
+        $this->load->model("UserModel");
+        $this->UserModel->deletefollow($_SESSION["user"]->userid ,$followid);
 
+        $account = $_SESSION["user"]->userid;
+
+        $this->load->model("UserModel");
+        //完成取資料動作
+        $userfile = $this->UserModel->getUserfile($account); 
+        $userwork = $this->UserModel->getUserwork($account); 
+        $userstudentid = $this->UserModel->getUserstudentid($account); 
+
+        $this->load->model("IssueModel");
+        $tags = $this->IssueModel->getUserTag($_SESSION["user"]->userid);
+
+
+        $this->load->view('useredit',Array(  
+        "pageTitle" => "Edit profile",
+        "userwork" => $userwork,
+        "userstudentid" => $userstudentid,
+        "tags" => $tags,
+        "userfile" => $userfile
+        ));  
+    }
+    public function notify(){
+        if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
+            echo '<input type="hidden" id="noevent" value="0">';
+            echo '<li><a href="#">No any event</a><li>';
+        }  
+
+        $this->load->model("UserModel");
+        $userpostingevent= $this->UserModel->getpostingevent($_SESSION["user"]->userid);
+        $userreplyevent= $this->UserModel->getreplyevent($_SESSION["user"]->userid);
+
+        $event = array_merge($userpostingevent, $userreplyevent);
+        usort($event,function($a,$b){
+            return strcmp($b->timestamp,$a->timestamp);
+        });
+        if (count($event)==0){
+            echo '<input type="hidden" id="noevent" value="0">';
+            echo '<li><a href="#">No any event</a><li>';
+        }else{
+            foreach($event as $aevent){
+                if(count((array)$aevent)==4){//posting event
+                    $url=site_url("user/postseen".'?issueid='.$aevent->issueid);
+                    $message=$aevent->authorid.' just posted a issue,'.$aevent->title.',which you would like';
+                    $string="<li><a href=".$url.'>'.$message."</a></li>";
+                }
+                else{//replyevent
+                    $url=site_url("user/replyseen".'?replyid='.$aevent->replyid.'&issueid='.$aevent->issueid);
+                    $message=$aevent->userid.' just replied in '.$aevent->authorid."'s issue,".$aevent->title.'.';
+                    $string="<li><a href=".$url.'>'.$message."</a></li>";
+                }
+                echo $string;
+            }
+        }
+    }
+    public function postseen(){
+       $issueid=$this->input->get("issueid",TRUE);
+       $this->load->model("UserModel");
+       $this->UserModel-> updatepostseen($_SESSION["user"]->userid,$issueid);
+       redirect(site_url("issue/view/".$issueid));
+    }
+    public function replyseen(){
+       $replyid=$this->input->get("replyid",TRUE);
+       $issueid=$this->input->get("issueid",TRUE);
+       $this->load->model("UserModel");
+       $this->UserModel-> updatereplyseen($_SESSION["user"]->userid,$replyid);
+       redirect(site_url("issue/view/".$issueid));
     }
 
 	public function profile(){
         	if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁
-        		redirect(site_url("/user/login")); //轉回登入頁
-        		return true;
+        		$this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				)); 
 
         	}
         	$account = $_SESSION["user"]->userid;
         	//id should load from total view
         	$id = trim($this->input->get("userID"));
         	
+
         	if ( $id == $account ){
         		$this->edit();
         	}//check whether this user is the user himself or not
@@ -247,7 +329,63 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
                         "issues" => $userpost
         		));
         	}
-        }
+    }
+    // 處理Search ajax的funtcion （from table.php）
+    /*public function search(){
+        //接參數 用來搜尋user 的name or id
+        $queryTerm = trim($this->input->post("queryTerm"));
+        $resultArray =  array('');
+        //引入要用的model
+        $this->load->model('listmodel');
+        $this->load->model('usermodel');
+        //先撈出所有的user list 準備做name的比對
+        $dataArray = $this->listmodel->getUsersFromName();
+        //echo html的格式 是為了 回傳結果給前台直接改變頁面用的
+        echo "<thead>";
+        echo "<tr>";
+        echo "<td>Name</td>" ; 
+        echo "<td>StudentID</td>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
+        foreach ($dataArray as $key => $value) {
+            $tempText = "";
+            $studentidArray = $this->usermodel->getUserstudentid($value->userid);
+            foreach ($studentidArray as $key2 => $studentid)
+                {
+                    if( $key2 > 0  ){
+                        $tempText = $tempText . ",";
+        	// if ( $id == $account ){
+        	// 	// $this->edit();
+         //        $editable = true;
+        	// }//check whether this user is the user himself or not
+        	// else {
+         //        $editable = false;
+         //    }
+
+    		$this->load->model("UserModel");
+    		//完成取資料動作
+    		$userfile = $this->UserModel->getUserfile($id);
+    		$userwork = $this->UserModel->getUserwork($id);
+    		$userstudentid = $this->UserModel->getUserstudentid($id);
+    		 
+
+            //取得此使用者的發文紀錄
+            $this->load->model("IssueModel");
+            $userpost = $this->IssueModel->getUserIssues($id);
+            $tags = $this->IssueModel->getUserTag($id);
+
+    		$this->load->view('profile',Array(
+    				"userwork" => $userwork,
+    				"userstudentid" => $userstudentid,
+    				"userfile" => $userfile,
+    				"account" => $account,
+                    "tags" => $tags,
+                    "issues" => $userpost,
+                    "profileID" => $id
+    		));
+        	
+        }*/
         // 處理Search ajax的funtcion （from table.php）
         public function search(){
             //接參數 用來搜尋user 的name or id
@@ -278,43 +416,57 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
 
                        // echo print_r($studentid);
                     }
-                $tempArray = array("username"=>$value->username,"userid"=>$value->userid,"studentid"=>$tempText);
-                array_push($resultArray, $tempArray); 
-            }
+                    $tempText = $tempText . $studentid->studentid;
 
-
-
-            //開始比對資料的foreach迴圈
-            foreach ($resultArray as $key => $value) {
-                //判斷從資料庫拿出來的資料 是不是跟query相同
-                //echo print_r($value);
-                if( (strchr($value["username"],$queryTerm)!=false )|| (strchr($value["studentid"],$queryTerm)!=false)){
-                    //相同的時候開始做的事情 同樣的echo html的地方是為了前台座的處理
-                    // $studentidArray = $this->usermodel->getUserstudentid($value->userid);
-                    $text = "<tr class='tr_hover' em ='".$value["userid"]."'>";
-                    echo $text ;
-                    echo "<td>";
-                    echo $value["username"];
-                    echo "</td>";
-                    echo "<td>";
-                    echo $value["studentid"];
-                    //這邊是為了當名字一樣的時候撈出他的student id
-                    // foreach ($studentidArray as $key2 => $studentid)
-                    // {
-                        // if( $key2 > 0  ){
-                            // echo ",";
-                        // }
-                        // echo $studentid->studentid;
-
-                       // echo print_r($studentid);
-                    // }
-                    echo "</td>";
-                    echo "</tr>";
+                   // echo print_r($studentid);
                 }
+            $tempArray = array("username"=>$value->username,"userid"=>$value->userid,"studentid"=>$tempText);
+            array_push($resultArray, $tempArray); 
+        
 
+        //開始比對資料的foreach迴圈
+        foreach ($resultArray as $key => $value) {
+            //判斷從資料庫拿出來的資料 是不是跟query相同
+            //echo print_r($value);
+            if( (strchr($value["username"],$queryTerm)!=false )|| (strchr($value["studentid"],$queryTerm)!=false)){
+                //相同的時候開始做的事情 同樣的echo html的地方是為了前台座的處理
+                // $studentidArray = $this->usermodel->getUserstudentid($value->userid);
+                $text = "<tr class='tr_hover' em ='".$value["userid"]."'>";
+                echo $text ;
+                echo "<td>";
+                echo $value["username"];
+                echo "</td>";
+                echo "<td>";
+                echo $value["studentid"];
+                //這邊是為了當名字一樣的時候撈出他的student id
+                // foreach ($studentidArray as $key2 => $studentid)
+                // {
+                    // if( $key2 > 0  ){
+                        // echo ",";
+                    // }
+                    // echo $studentid->studentid;
+
+                   // echo print_r($studentid);
+                // }
+                echo "</td>";
+                echo "</tr>";
             }
-           echo "</tbody>";
+
         }
 
-    }  
+       echo "</tbody>";
+    }
+
+        public function myProfile() {
+            if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
+                redirect(site_url("/user/login")); //轉回登入頁  
+                return true;  
+            }  //end if
+            $account = $_SESSION["user"]->userid;
+            // redirect('/welcome/', 'location');
+            redirect(site_url("/user/profile?userID=".$account));
+        }
+
+
+}  
 ?>
