@@ -459,8 +459,9 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
 
         public function myProfile() {
             if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
-                redirect(site_url("/user/login")); //轉回登入頁  
-                return true;  
+                $this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				)); 
             }  //end if
             $account = $_SESSION["user"]->userid;
             // redirect('/welcome/', 'location');
