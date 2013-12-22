@@ -1,7 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');  
       
     class User extends MY_Controller {  
-        public function register()  {  
+
+
+		public function singlesignon(){
+			if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
+                $this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				)); 
+            }
+			
+		}
+		
+		
+        public function register(){  
             $this->load->view('register',Array(   
             "pageTitle" => "Sign up"
             )); 
@@ -50,26 +62,17 @@
             ));  
         }  //end login
 
-        public function logining(){
+        public function logining($account){
             if(isset($_SESSION["user"]) && $_SESSION["user"] != null){ //已經登入的話直接回首頁
                 redirect(site_url("/")); //轉回首頁
                 return true;
             }
  
-            $account = trim($this->input->post("UserID"));
-            $password = trim($this->input->post("password"));
- 
             $this->load->model("UserModel");
-            $user = $this->UserModel->getUser($account,$password);
+            $user = $this->UserModel->getUser($account);
  
             if($user == null){
-                $this->load->view(
-                "login",
-                Array( "pageTitle" => "Logining" ,
-                "UserID" => $account,
-                "errorMessage" => "ID or password wrong"
-                ));  
-                return true;
+                redirect(site_url("/"));
             }
 
             $_SESSION["user"] = $user;
@@ -83,8 +86,9 @@
 
         public function edit(){
             if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
-                redirect(site_url("/user/login")); //轉回登入頁  
-                return true;  
+                $this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				));  
             }  //end if
             $account = $_SESSION["user"]->userid;
 
@@ -109,8 +113,9 @@
 
         public function editing(){
             if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
-                redirect(site_url("/user/login")); //轉回登入頁  
-                return true;  
+                $this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				));   
             }  
             $userid = trim($this->input->post("fileuserid"));
             if ($userid != $_SESSION["user"]->userid ){  
@@ -246,6 +251,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
                 redirect(site_url("/user/login")); //轉回登入頁
                 return true;
 
+
             }
             $account = $_SESSION["user"]->userid;
             //id should load from total view
@@ -253,6 +259,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             
             // if ( $id == $account ){
             //  // $this->edit();
+
          //        $editable = true;
             // }//check whether this user is the user himself or not
             // else {
@@ -351,8 +358,9 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         }
         public function myProfile() {
             if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
-                redirect(site_url("/user/login")); //轉回登入頁  
-                return true;  
+                $this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				)); 
             }  //end if
             $account = $_SESSION["user"]->userid;
             // redirect('/welcome/', 'location');

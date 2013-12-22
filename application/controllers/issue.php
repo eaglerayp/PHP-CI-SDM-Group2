@@ -1,12 +1,12 @@
-
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');  
       
     class Issue extends MY_Controller { 
 		public function post(){
 			/* Check whether the user login or not*/
 			if (!isset($_SESSION["user"])){
-				redirect(site_url("/user/login"));	// Redirect to the login page
-				return true;
+				$this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				)); 
 			}  //end if
 		
 			$this->load->view('postissue',
@@ -18,8 +18,9 @@
 		public function posting(){
 			/* Check whether the user login or not*/
 			if (!isset($_SESSION["user"])){
-				redirect(site_url("/user/login"));	// Redirect to the login page
-				return true;
+				$this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				)); 
 			} 
 	 
 			$title = trim($this->input->post("title"));
@@ -127,8 +128,9 @@
 		public function issuelist(){
 			/* Check whether the user login or not*/
 			if (!isset($_SESSION["user"])){
-				redirect(site_url("/user/login"));	// Redirect to the login page
-				return true;
+				$this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				)); 
 			}  //end if
 		
 			$this->load->model("issuemodel");
@@ -174,8 +176,9 @@
 	    public function search(){
 	    	/* Check whether the user login or not*/
 			if (!isset($_SESSION["user"])){
-				redirect(site_url("/user/login"));	// Redirect to the login page
-				return true;
+				$this->load->view('singlesignon',Array(   
+				"pageTitle" => "Sign in"
+				)); 
 			}  //end if
 
 	    	$queryTerm = $this->input->post("queryTerm");
