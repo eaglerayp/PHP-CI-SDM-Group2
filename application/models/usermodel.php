@@ -175,4 +175,57 @@
             $this->db->delete('follow');
 
         }
+
+        function getpostingevent($userid){
+            /*SELECT postingevent.issueid, timestamp, authorid, title
+            FROM `postingevent`
+            LEFT JOIN `issue` ON issue.issueid = postingevent.issueid
+            WHERE notifiedid =1
+            ORDER BY timestamp DESC*/
+            $this->db->select("postingevent.issueid, timestamp, authorid, title");  
+            $this->db->from('postingevent');  
+            $this->db->join('issue', 'postingevent.issueid = issue.issueid','left');  
+            $this->db->where("notifiedid",$userid);  
+            $this->db->where("seen",0);  
+            $this->db->order_by("timestamp", "desc"); 
+            $query = $this->db->get();
+
+            return $query->result();
+        }
+
+        function getreplyevent($userid){
+            /*SELECT reply.issueid, reply.userid, reply.timestamp, title
+            FROM `replyevent`
+            LEFT JOIN `reply` ON reply.replyid = replyevent.replyid
+            LEFT JOIN `issue` ON issue.issueid = reply.issueid
+            WHERE notifiedid =1
+            AND seen =0
+            ORDER BY reply.timestamp DESC*/
+            $this->db->select("replyevent.replyid,reply.issueid, reply.userid, reply.timestamp,authorid, title");  
+            $this->db->from('replyevent');  
+            $this->db->join('reply', 'reply.replyid = replyevent.replyid','left');
+            $this->db->join('issue', 'issue.issueid = reply.issueid','left');  
+            $this->db->where("notifiedid",$userid);  
+            $this->db->where("seen",0);  
+            $this->db->order_by("reply.timestamp", "desc"); 
+            $query = $this->db->get();
+
+            return $query->result();
+        }
+        function updatepostseen($userid,$issueid){
+            $data = array(
+                'seen' => 1
+            );
+            $this->db->where('notifiedid', $userid);
+            $this->db->where('issueid', $issueid);
+            $this->db->update('postingevent', $data);
+        }
+        function updatereplyseen($userid,$replyid){
+            $data = array(
+                'seen' => 1
+            );
+            $this->db->where('notifiedid', $userid);
+            $this->db->where('replyid', $replyid);
+            $this->db->update('replyevent', $data);
+        }
     }  
