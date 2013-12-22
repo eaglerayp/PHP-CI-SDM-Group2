@@ -64,8 +64,9 @@ $config = array(
 			'password' => array('abc'),
 		),
 		'r02725019:1234' => array(
-			'uid' => array('r02725020'),
-			'group' => array('teacher'),
+			'userid' => array('r02725019'),
+			'username' => array('陳昱安'),
+			'password' => array('1234'),
 		),
 	),
 	
