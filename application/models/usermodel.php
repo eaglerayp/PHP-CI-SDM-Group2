@@ -190,6 +190,7 @@
             }
             return null;
         }
+        
         function deletefollow($userid,$followid){
             $this->db->select("key.*");  
             $this->db->from('follow');  

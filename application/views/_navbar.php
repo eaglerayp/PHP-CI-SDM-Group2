@@ -56,7 +56,7 @@
       <!-- Wrap the .navbar in .container to center it within the absolutely positioned parent. -->
       <div class="container">
 
-        <div class="navbar">
+        <div class="navbar navbar-inverse">
           <div class="navbar-inner">
             <!-- Responsive Navbar Part 1: Button for triggering responsive navbar (not covered in tutorial). Include responsive CSS to utilize. -->
             <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
