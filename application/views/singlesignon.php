@@ -6,7 +6,6 @@ $auth->requireAuth();
 $attrs = $auth->getAttributes();
 
 
-ob_start();
 $url = site_url("user/logining/".$attrs['userid'][0]);
 echo "<script type='text/javascript'>";
 echo "window.location.href='$url'";

@@ -4,13 +4,15 @@
         {  
             parent::__construct();  
         }  
+		
  		function insert($account,$password){  
         	$this->db->insert("user",   
             Array(  
             "UserID" =>  $account,  
             "password" => $password  
 			));  
-  	    } 
+  	    }
+		
   	    function checkUserExist($account){  
         	$this->db->select("COUNT(*) AS users");  
         	$this->db->from("user");  
@@ -19,32 +21,38 @@
       
         	return $query->row()->users > 0 ;  
     	}  
+		
         public function getUser($account){  
-            $this->db->select("userid,username");  
-            $query = $this->db->get_where("ssodb",Array("userid" => $account));  
-      
-            if ($query->num_rows() > 0){ //如果數量大於0  
-				$this->db->select("COUNT(*) AS users");  
-				$this->db->from("user");  
-				$this->db->where("userid", $account);  
-				$check = $this->db->get();  
-				if($check->row()->users <= 0){
-					$this->db->insert("user",   //新增第一次來到此網站的使用者
-					Array(  
-					"userid" =>  $query->row()->userid,  
-					"username" => $query->row()->username,
-					)); 
-					$this->db->insert("userstudentid",   //新增第一次來的使用者的學號
-					Array(  
-					"userid" =>  $query->row()->userid,  
-					"studentid" => $query->row()->userid,
-					)); 
-				}
-                return $query->row();  //回傳第一筆  
-            }
-            else{  
-                return null;  
-            }  
+			$this->db->select("COUNT(*) AS ids");  //檢查是否已經有同身分ID已經登入過
+        	$this->db->from("userstudentid");  
+        	$this->db->where("studentid", $account);  
+        	$id = $this->db->get();
+			if($id->row()->ids > 0){				//已來過
+				$this->db->select("userid");  
+				$this->db->from("userstudentid");  
+				$this->db->where("studentid", $account);
+				$getid = $this->db->get();
+				$this->db->select("userid,username");  
+				$query = $this->db->get_where("ssodb",Array("userid" => $getid->row()->userid));  
+			}
+			else{
+				$email = "@ntu.edu.tw";
+				$this->db->select("userid,username");  
+				$query = $this->db->get_where("ssodb",Array("userid" => $account));
+				
+				$this->db->insert("user",   //新增第一次來到此網站的使用者
+				Array(  
+				"userid" =>  $query->row()->userid,  
+				"username" => $query->row()->username,
+				"email" => strtolower($query->row()->userid.$email),
+				)); 
+				$this->db->insert("userstudentid",   //新增第一次來的使用者的學號
+				Array(  
+				"userid" =>  $query->row()->userid,  
+				"studentid" => $query->row()->userid,
+				)); 
+			}
+			return $query->row();  //回傳第一筆  
         }
 
         function getUserfile($account){  
