@@ -83,7 +83,7 @@
 
         function getUserwork($account){  
             $this->db->select("*");  
-            $this->db->order_by("state", "asc"); 
+            $this->db->order_by("startyear", "asc"); 
             $query = $this->db->get_where("userwork",Array("userid" => $account));  
             
             if ($query->num_rows() > 0){ //如果數量大於0  
@@ -124,12 +124,13 @@
             $this->db->update('user', $data);
         }
 
-        function insertwork($userid,$position,$employer){  
+        function insertwork($userid,$position,$employer,$startyear){  
             $this->db->insert("userwork",   
             Array(  
             "userid" =>  $userid,  
             "position" => $position,
-            "employer" => $employer
+            "employer" => $employer,
+            "startyear" => $startyear
         ));  
         }
 
@@ -156,10 +157,12 @@
             $this->db->from("key");
             $this->db->where("tag",$key);
             $query=$this->db->get(); 
-
-
-            $query2 = $this->db->get_where('follow', array('userid' => $userid, 'followid' => $query->row()->tagid ));
-            
+            $tagid="";
+            if(count($query->row())>0){
+                $tagid=$query->row()->tagid ;
+            }
+            $query2 = $this->db->get_where('follow', array('userid' => $userid, 'followid' => $tagid));
+            echo($query2->num_rows());
             if($query2->num_rows() < 1){    // check if the user add a tag that has been added before
                 if($query->num_rows() <= 0){            
                     $this->db->insert("key", 
@@ -172,6 +175,7 @@
                     "userid" => $userid,
                     "followid" => $tagid
                     )); 
+                return $tagid;
                 } else{
                     $data = array(
                     'frequency' => $query->row()->frequency + 1
@@ -188,7 +192,6 @@
                 }
                 return $tagid;
             }
-            return null;
         }
         
         function deletefollow($userid,$followid){

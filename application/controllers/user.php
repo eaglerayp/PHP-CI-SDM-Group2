@@ -143,11 +143,11 @@ and  "email","phone","address","phoneshow","addressshow","autobiography","userca
             $addwork = trim($this->input->post("addwork"));   
             $addid= trim($this->input->post("addid"));   
             $imgpath= trim($this->input->post("imgpath"));  
-            $currentposition= trim($this->input->post("currentposition"));  
+           /* $currentposition= trim($this->input->post("currentposition"));  
             $currentemployer= trim($this->input->post("currentemployer")); 
             $currentstate= trim($this->input->post("currentstate"));  
             $currentoldposition= trim($this->input->post("currentoldposition"));  
-            $currentoldemployer= trim($this->input->post("currentoldemployer")); 
+            $currentoldemployer= trim($this->input->post("currentoldemployer")); */
             $addtag = trim($this->input->post("tag")); 
 
 
@@ -174,22 +174,11 @@ and  "email","phone","address","phoneshow","addressshow","autobiography","userca
 reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.html
 */
             $this->load->model("UserModel");
-            //implement addtag
-            if($addtag!=""){
-                $tagid= $this->UserModel->addfollow($userid ,$addtag);
-            }
             //完成取資料動作
             $this->UserModel->updateUser($userid,$email,$address,$phone,$addressshow,$phoneshow,$autobiography,$usercategory,$imgpath,$positionshow,$employershow); 
-            if($addwork==1 && $position!=""){
-                $this->UserModel->insertwork($userid,$position,$employer);
-            }
+
             if($addid==1 && $studentid!=""){
                 $this->UserModel->insertstudentid($userid,$studentid);
-            }
-            if($currentemployer!="" || $currentposition!=""){
-                if($currentemployer!=$currentoldemployer || $currentposition!=$currentoldposition){
-                    $this->UserModel->updateCurrentwork($userid,$currentposition,$currentemployer,$currentstate);
-                }
             }
             
             $userfile = $this->UserModel->getUserfile($userid); 
@@ -409,6 +398,31 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             // redirect('/welcome/', 'location');
             redirect(site_url("/user/profile?userID=".$account));
         }
-
+        public function addfollowtag(){
+                $this->load->model("UserModel");
+                $addtag = trim($this->input->post("tag")); 
+                $userid = $_SESSION["user"]->userid;
+            //implement addtag
+            if($addtag!=""){
+                $tagid= $this->UserModel->addfollow($userid ,$addtag);
+            }
+            echo '<td id="'.$tagid.'" style="font-size:26px">'.$addtag.'</td>
+                  <td><a id="'.$tagid.'" href="'.site_url("user/deleteTag/".$tagid).'">Delete</a></td>';
+        }
+        public function addwork(){
+            $this->load->model("UserModel");
+            $Workplace = trim($this->input->post("Workplace"));
+            $Position = trim($this->input->post("Position"));
+            $Startyear = trim($this->input->post("Startyear"));
+            $userid = $_SESSION["user"]->userid;
+            if($Workplace!="" && $Position!=""){
+                $this->UserModel->insertwork($userid,$Workplace,$Position,$Startyear);
+            }
+            echo '      <td style="font-size:26px">'.$Workplace.'</td>
+                         
+                        <td style="font-size:26px">'.$Position.'</td>
+                        
+                        <td style="font-size:26px">'.$Startyear.'</td>';
+        }
     }  
 ?>

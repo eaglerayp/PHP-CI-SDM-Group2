@@ -23,7 +23,7 @@ $config = array (
 	 * reverse proxy).
 	 */
 
-	'baseurlpath'           => 'http://localhost:8888/public_html/simplesamlphp/www/',
+	'baseurlpath'           => 'http://localhost/sdmg2/simplesamlphp/www/',
 	'certdir'               => 'cert/',
 	'loggingdir'            => 'log/',
 	'datadir'               => 'data/',
