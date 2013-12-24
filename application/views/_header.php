@@ -11,11 +11,10 @@
         ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="Eeeagle">
+    <meta name="author" content="Ohya">
 
     <!-- Le styles -->
     <link href="<?=base_url("/css/bootstrap.css")?>" rel="stylesheet">
-    <link href="<?=base_url("/css/main.css")?>" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 40px;
@@ -23,6 +22,7 @@
         background-color: #f5f5f5;
       }
       .container {
+
 
       }
       .form-signin {
