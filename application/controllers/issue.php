@@ -187,19 +187,21 @@
 			$resultArray = array();
 
             foreach ($issues as $key => $value) {
-            	$tag = $this->issuemodel->getTagArray($value->issueid);
+            	$tags = $this->issuemodel->getTagArray($value->issueid);
             	
                 if( (strchr($value->title,$queryTerm)!=false) ){
 
                 	array_push($resultArray, $value);
                 }
-              //   else{
-              //   	foreach ($tag as $key2 => $value2) {
-            		// 	if( (strchr($value2->tag,$queryTerm)!=false) ){
-			           //      	array_push($resultArray, $value);
-			           //      }
-	            	// }
-              //   }
+                else{
+                	if($tags!=null){
+	                	foreach ($tags as $tag) {
+	            			if( (strchr($tag,$queryTerm)!=false) ){
+				                	array_push($resultArray, $value);
+				                }
+		            	}
+		            }
+                }
             }
 			$this->load->view('issuesearch',
 			Array(
