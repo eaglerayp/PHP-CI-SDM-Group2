@@ -6,7 +6,7 @@
 	if($userwork!=null){
 		$currentwork= array_pop($userwork);
 	}else{
-		$currentwork= (object) array('position' => '', 'employer' => '','state'=>'');
+		$currentwork= (object) array('position' => '', 'employer' => '','state'=>'','startyear'=>'');
 	}
 ?>
 <?php include("_header.php"); ?> 

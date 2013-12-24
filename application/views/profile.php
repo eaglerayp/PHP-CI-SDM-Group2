@@ -2,7 +2,7 @@
 	if($userwork!=null){
 		$currentwork= array_pop($userwork);
 	}else{
-		$currentwork= (object) array('position' => '', 'employer' => '');
+		$currentwork= (object) array('position' => '', 'employer' => '','startyear'=>'');
 	}
 ?>
 <?php include("_header.php"); ?> 
@@ -124,6 +124,12 @@
 			<tr>
 				<td>Current employer</td>
 				<td><?php  echo $currentwork->employer;?></td>
+			</tr>
+			<?php }?>
+			<?php if ($userfile->positionshow == 1 ){ ?>
+			<tr>
+				<td>Startyear</td>
+				<td><?php echo $currentwork->startyear; ?></td>
 			</tr>
 			<?php }?>
 
