@@ -42,7 +42,7 @@
                 <!--<li><a href="#about">Articles</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <!-- Read about Bootstrap dropdowns at http://twbs.github.com/bootstrap/javascript.html#dropdowns -->
-                <!--<li class="dropdown">
+                <!-- <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     <li><a href="#">Action</a></li>
@@ -54,7 +54,7 @@
                     <li><a href="#">One more separated link</a></li>
                   </ul>
                   
-                </li>-->
+                </li> -->
               </ul>
               <!-- login status -->
               <?php 

@@ -14,7 +14,7 @@
         <div>  
             
             <h1>AlumniBook</h1>  
-            <h3>Hi, welcome to NTUIM family!</h3>
+            <h3>Hi, welcome to the NTUIM family!</h3>
             <img src="<?=base_url("/img/homepage.jpeg")?>" />
         </div>  
     

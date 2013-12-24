@@ -49,7 +49,9 @@
 		top: 400px;
 
 	}
+
 </style>
+<div class='container'>
 	<div class='user_profile'>
 		<?php 
 			if($account == $profileID){
@@ -170,3 +172,4 @@
          <?php }  //end else ?>  
 		
 	</div>
+</div>

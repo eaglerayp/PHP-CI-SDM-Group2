@@ -94,5 +94,5 @@
     	</table>    
 		<div><a href="<?=site_url("issue/post")?>">Add a Issue</a></div>
     </div>
-
+<?php include("_footer.php"); ?> 
 
