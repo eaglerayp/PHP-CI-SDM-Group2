@@ -12,7 +12,6 @@
 			
 		}
 		
-		
         public function register(){  
             $this->load->view('register',Array(   
             "pageTitle" => "Sign up"

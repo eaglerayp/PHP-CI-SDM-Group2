@@ -82,6 +82,10 @@ $config = array(
 			'userid' => array('R02725020'),
 			'username' => array('李維珣'),
 		),
+		'B98705018:xu3jo6vmp6' => array(
+			'userid' => array('B98705018'),
+			'username' => array('李維珣'),
+		),
 	),
 	
 

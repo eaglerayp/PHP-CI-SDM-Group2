@@ -69,8 +69,8 @@
             <div class="nav-collapse collapse">
               <ul class="nav">
                 <li class="active" id='nav_home'><a href="<?=site_url("/")?>">Home</a></li>
-                <li class="" id='nav_viewlist'><a href="<?=site_url("/viewlist/table")?>">Member List</a></li>
-				        <li class="" id='nav_issuelist'><a href="<?=site_url("/issue/issuelist")?>">Issues List</a></li>
+                <li class="" id='nav_viewlist'><a href="<?=site_url("/viewlist/table")?>">Members</a></li>
+				        <li class="" id='nav_issuelist'><a href="<?=site_url("/issue/issuelist")?>">Issues</a></li>
                 <li class="" id='nav_edit'><a href="<?=site_url("/user/myProfile")?>">My Profile</a></li> 
                 <!-- <li class="" id='nav_edit'><a href="<?=site_url("user/edit")?>">My profile</a></li>  -->
                 <!--<li><a href="#about">Articles</a></li>
