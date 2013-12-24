@@ -9,7 +9,7 @@
             Array(  
             "UserID" =>  $account,  
             "password" => $password  
-        ));  
+			));  
   	    } 
   	    function checkUserExist($account){  
         	$this->db->select("COUNT(*) AS users");  
@@ -31,10 +31,27 @@
         //     }  
         // }
         public function getUser($account){  
-            $this->db->select("id,name");  
-            $query = $this->db->get_where("ssodb",Array("id" => $account));  
+
+            $this->db->select("userid,username");  
+            $query = $this->db->get_where("ssodb",Array("userid" => $account));  
       
             if ($query->num_rows() > 0){ //如果數量大於0  
+				$this->db->select("COUNT(*) AS users");  
+				$this->db->from("user");  
+				$this->db->where("userid", $account);  
+				$check = $this->db->get();  
+				if($check->row()->users <= 0){
+					$this->db->insert("user",   //新增第一次來到此網站的使用者
+					Array(  
+					"userid" =>  $query->row()->userid,  
+					"username" => $query->row()->username,
+					)); 
+					$this->db->insert("userstudentid",   //新增第一次來的使用者的學號
+					Array(  
+					"userid" =>  $query->row()->userid,  
+					"studentid" => $query->row()->userid,
+					)); 
+				}
                 return $query->row();  //回傳第一筆  
             }
             else{  

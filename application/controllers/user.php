@@ -363,7 +363,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
 
                        // echo print_r($studentid);
                     }
-                $tempArray = array("username"=>$value->username,"userid"=>$value->userid,"studentid"=>$tempText);
+                $tempArray = array("username"=>$value->username,"userid"=>$value->userid,"studentid"=>$tempText,"autobiography"=>$value->autobiography);
                 array_push($resultArray, $tempArray); 
             }
 
@@ -373,7 +373,7 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
             foreach ($resultArray as $key => $value) {
                 //判斷從資料庫拿出來的資料 是不是跟query相同
                 //echo print_r($value);
-                if( (strchr($value["username"],$queryTerm)!=false )|| (strchr($value["studentid"],$queryTerm)!=false)){
+                if( (strchr($value["username"],$queryTerm)!=false )|| (strchr($value["studentid"],$queryTerm)!=false)||(strchr($value["autobiography"],$queryTerm)!=false)){
                     //相同的時候開始做的事情 同樣的echo html的地方是為了前台座的處理
                     // $studentidArray = $this->usermodel->getUserstudentid($value->userid);
                     $text = "<tr class='tr_hover' em ='".$value["userid"]."'>";

@@ -22,6 +22,7 @@ $config = array (
 	 * external url, no matter where you come from (direct access or via the
 	 * reverse proxy).
 	 */
+
 	'baseurlpath'           => 'http://localhost:8888/public_html/simplesamlphp/www/',
 	'certdir'               => 'cert/',
 	'loggingdir'            => 'log/',
