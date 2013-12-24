@@ -118,33 +118,39 @@
             $this->db->from("key");
             $this->db->where("tag",$key);
             $query=$this->db->get(); 
+
+
+            $query2 = $this->db->get_where('follow', array('userid' => $userid, 'followid' => $query->row()->tagid ));
             
-            if($query->num_rows() <= 0){            
-                $this->db->insert("key", 
+            if($query2->num_rows() < 1){    // check if the user add a tag that has been added before
+                if($query->num_rows() <= 0){            
+                    $this->db->insert("key", 
+                        Array(
+                        "tag" => $key
+                    )); 
+                    $tagid=$this->db->insert_id();
+                    $this->db->insert("follow", 
                     Array(
-                    "tag" => $key
-                )); 
-                $tagid=$this->db->insert_id();
-                $this->db->insert("follow", 
-                Array(
-                "userid" => $userid,
-                "followid" => $tagid
-                )); 
-            } else{
-                $data = array(
-                'frequency' => $query->row()->frequency + 1
-                );
-            
-                $this->db->where("tagid",$query->row()->tagid);
-                $this->db->update("key",$data);
-                $tagid=$query->row()->tagid;
-                $this->db->insert("follow", 
-                Array(
-                "userid" => $userid,
-                "followid" => $tagid
-                )); 
+                    "userid" => $userid,
+                    "followid" => $tagid
+                    )); 
+                } else{
+                    $data = array(
+                    'frequency' => $query->row()->frequency + 1
+                    );
+                
+                    $this->db->where("tagid",$query->row()->tagid);
+                    $this->db->update("key",$data);
+                    $tagid=$query->row()->tagid;
+                    $this->db->insert("follow", 
+                    Array(
+                    "userid" => $userid,
+                    "followid" => $tagid
+                    )); 
+                }
+                return $tagid;
             }
-            return $tagid;
+            return null;
         }
         function deletefollow($userid,$followid){
             $this->db->select("key.*");  

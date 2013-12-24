@@ -245,14 +245,58 @@ reference: http://www.codeigniter.org.tw/user_guide/libraries/file_uploading.htm
         "userfile" => $userfile
         ));  
     }
+    public function notify(){
+        if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
+            echo '<input type="hidden" id="noevent" value="0">';
+            echo '<li><a href="#">No any event</a><li>';
+        }  
 
-    public function profile(){
-            if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁
-                redirect(site_url("/user/login")); //轉回登入頁
-                return true;
+        $this->load->model("UserModel");
+        $userpostingevent= $this->UserModel->getpostingevent($_SESSION["user"]->userid);
+        $userreplyevent= $this->UserModel->getreplyevent($_SESSION["user"]->userid);
 
-
+        $event = array_merge($userpostingevent, $userreplyevent);
+        usort($event,function($a,$b){
+            return strcmp($b->timestamp,$a->timestamp);
+        });
+        if (count($event)==0){
+            echo '<input type="hidden" id="noevent" value="0">';
+            echo '<li><a href="#">No any event</a><li>';
+        }else{
+            foreach($event as $aevent){
+                if(count((array)$aevent)==4){//posting event
+                    $url=site_url("user/postseen".'?issueid='.$aevent->issueid);
+                    $message=$aevent->authorid.' just posted a issue,'.$aevent->title.',which you would like';
+                    $string="<li><a href=".$url.'>'.$message."</a></li>";
+                }
+                else{//replyevent
+                    $url=site_url("user/replyseen".'?replyid='.$aevent->replyid.'&issueid='.$aevent->issueid);
+                    $message=$aevent->userid.' just replied in '.$aevent->authorid."'s issue,".$aevent->title.'.';
+                    $string="<li><a href=".$url.'>'.$message."</a></li>";
+                }
+                echo $string;
             }
+        }
+    }
+    public function postseen(){
+       $issueid=$this->input->get("issueid",TRUE);
+       $this->load->model("UserModel");
+       $this->UserModel-> updatepostseen($_SESSION["user"]->userid,$issueid);
+       redirect(site_url("issue/view/".$issueid));
+    }
+    public function replyseen(){
+       $replyid=$this->input->get("replyid",TRUE);
+       $issueid=$this->input->get("issueid",TRUE);
+       $this->load->model("UserModel");
+       $this->UserModel-> updatereplyseen($_SESSION["user"]->userid,$replyid);
+       redirect(site_url("issue/view/".$issueid));
+    }
+    public function profile(){
+            if (!isset($_SESSION["user"])){//尚未登入時轉到登入頁  
+                $this->load->view('singlesignon',Array(   
+                "pageTitle" => "Sign in"
+                )); 
+            }  //end if
             $account = $_SESSION["user"]->userid;
             //id should load from total view
             $id = trim($this->input->get("userID"));
