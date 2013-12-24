@@ -76,6 +76,15 @@
 
 			return $query->result(); 
 		}
+        // function getSearchIssues(){
+        //     $this->db->select("issue.*, user.username");
+        //     $this->db->from('issue');
+        //     $this->db->join('user', 'issue.authorid = user.userid');
+        //     $this->db->order_by("timestamp","desc");//由大到小排序
+        //     $query = $this->db->get();
+
+        //     return $query->result(); 
+        // }
 		
 		function getIssue($issueID){
 			$this->db->select("issue.*,user.username");  

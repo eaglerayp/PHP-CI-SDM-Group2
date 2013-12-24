@@ -58,15 +58,29 @@ $config = array(
 		//'remember.username.enabled' => FALSE,
 		//'remember.username.checked' => FALSE,
 
-		'1:abc' => array(
-			'userid' => array('1'),
-			'username' => array('陳昱安'),
-			'password' => array('abc'),
+		'B00705023:xu3jo6vmp6' => array(
+			'userid' => array('B00705023'),
+			'username' => array('陳韋志'),
 		),
-		'r02725019:1234' => array(
-			'userid' => array('r02725019'),
+		'B00705025:xu3jo6vmp6' => array(
+			'userid' => array('B00705025'),
+			'username' => array('蔡伶'),
+		),
+		'R02725004:xu3jo6vmp6' => array(
+			'userid' => array('R02725004'),
+			'username' => array('楊筑雅'),
+		),
+		'R02725010:xu3jo6vmp6' => array(
+			'userid' => array('R02725010'),
 			'username' => array('陳昱安'),
-			'password' => array('1234'),
+		),
+		'R02725014:xu3jo6vmp6' => array(
+			'userid' => array('R02725014'),
+			'username' => array('施舜元'),
+		),
+		'R02725020:xu3jo6vmp6' => array(
+			'userid' => array('R02725020'),
+			'username' => array('李維珣'),
 		),
 	),
 	

@@ -187,10 +187,18 @@
 			$resultArray = array();
 
             foreach ($issues as $key => $value) {
-
+            	$tag = $this->issuemodel->getTagArray($value->issueid);
+            	
                 if( (strchr($value->title,$queryTerm)!=false) ){
 
                 	array_push($resultArray, $value);
+                }
+                else{
+                	foreach ($tag as $key2 => $value2) {
+            			if( (strchr($value2->tag,$queryTerm)!=false) ){
+			                	array_push($resultArray, $value);
+			                }
+	            	}
                 }
             }
 			$this->load->view('issuesearch',
