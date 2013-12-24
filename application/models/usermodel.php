@@ -20,8 +20,8 @@
         	return $query->row()->users > 0 ;  
     	}  
         public function getUser($account){  
-            $this->db->select("id,name");  
-            $query = $this->db->get_where("ssodb",Array("id" => $account));  
+            $this->db->select("userid,username");  
+            $query = $this->db->get_where("ssodb",Array("userid" => $account));  
       
             if ($query->num_rows() > 0){ //如果數量大於0  
                 return $query->row();  //回傳第一筆  
