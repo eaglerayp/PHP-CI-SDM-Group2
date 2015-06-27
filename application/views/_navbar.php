@@ -101,9 +101,8 @@
               </ul>  
               <?php }else{ ?>   
               <ul class="nav pull-right">  
-              <li><a href="<?=site_url("user/singlesignon")?>">Sign in</a></li>  
               <li class="divider-vertical"></li>  
-              <li><a href="<?=site_url("user/register")?>">Sign up</a></li>  
+              <li><a href="<?=site_url("user/singlesignon")?>">Sign in</a></li> 
               </ul>          
               <?php } ?> 
             </div><!--/.nav-collapse -->

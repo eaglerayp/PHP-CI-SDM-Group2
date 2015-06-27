@@ -230,7 +230,7 @@
             LEFT JOIN `issue` ON issue.issueid = postingevent.issueid
             WHERE notifiedid =1
             ORDER BY timestamp DESC*/
-            $this->db->select("postingevent.issueid, timestamp, authorid, title");  
+            $this->db->select("postingevent.issueid, postingevent.timestamp, authorid, title");  
             $this->db->from('postingevent');  
             $this->db->join('issue', 'postingevent.issueid = issue.issueid','left');  
             $this->db->where("notifiedid",$userid);  
